@@ -3,27 +3,28 @@ package uebung00;
 import SoFTlib.*;
 import static SoFTlib.Helper.*;
 
+import javax.management.loading.MLet;
 
-
-public class GeruestUebung0 extends SoFT {
+public class Geruest2a extends SoFT {
 
 	private static class A extends AbstractNode {
 
+		@Override
 		public String runNode(String input) throws SoFTException {
 			// Erstes Wort der Eingabezeile.
 			String Inhalt = words(input, 1, 1, 1);
 
 			Msg m1;
-
+			
 			// Nachricht formen (Inhalt:Signatur) und an Knoten B senden
-			m1 = form('n', Inhalt + ";" + signiere("A", Inhalt)).send("B");
-
-			if ((receive("B", 'q', 100)) == null) {
-				m1.send('B');
-				return "1"; // Ggf. Wiederholung des Sendens.
-			} else {
-				return "0"; // Keine Wiederholung des Sendens.
-			}
+			m1 = form('n', Inhalt + ";" + signiere("A", Inhalt));
+			int tryCount = 0;
+			do{
+				m1.send("B");
+				if ((receive("B", 'q', 100)) != null) break;
+			}while(tryCount++ < 6);
+			return tryCount == 0? "0" : "1";
+			
 		}
 
 		@Override
@@ -34,9 +35,11 @@ public class GeruestUebung0 extends SoFT {
 	}
 
 	private static class B extends AbstractNode {
-
+		
+		@Override
 		public String runNode(String input) throws SoFTException {
 			Msg m = receive('A', 'n', 200); // Empfange Nachricht von Knoten A.
+			
 			if (m == null) {
 				return "2 keinInhalt"; // Keine Nachr. erhalten.
 			}
@@ -83,7 +86,7 @@ public class GeruestUebung0 extends SoFT {
 		}
 	}
 
-	
+	@Override
 	public int result(String input, String[] output) {
 		// Bewertung der Ausgaben: 0 = bestens, ... , 5 = am schlechtesten.
 
@@ -101,6 +104,6 @@ public class GeruestUebung0 extends SoFT {
 	}
 
 	public static void main(String[] args) {
-		new GeruestUebung0().runSystem(new Node[] { new A(), new B() }, "Einf�hrungs�bung", "Einf�hrungs�bung f�r die Einarbeitung mit SoFT", "");
+		new Geruest2a().runSystem(new Node[] { new A(), new B() }, "Einf�hrungs�bung", "Einf�hrungs�bung f�r die Einarbeitung mit SoFT", "");
 	}
 }
