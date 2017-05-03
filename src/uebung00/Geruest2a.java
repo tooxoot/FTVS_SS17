@@ -18,12 +18,14 @@ public class Geruest2a extends SoFT {
 			
 			// Nachricht formen (Inhalt:Signatur) und an Knoten B senden
 			m1 = form('n', Inhalt + ";" + signiere("A", Inhalt));
-			int tryCount = 0;
+			
+			int tryCount = 1;
 			do{
 				m1.send("B");
 				if ((receive("B", 'q', 100)) != null) break;
 			}while(tryCount++ < 6);
-			return tryCount == 0? "0" : "1";
+			
+			return tryCount == 1? "0" : "1";
 			
 		}
 
