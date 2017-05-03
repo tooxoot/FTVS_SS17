@@ -3,17 +3,6 @@ package uebung00;
 import SoFTlib.Node;
 
 public abstract class AbstractNode extends Node {
-	// Bildung der Signatur modulo mod;
-	long mod = 10000;
-	// Geheimer Schluessel-Faktor von Knoten A.
-	long geheimFaktor = 2317;
-	// Oeffentlicher Schluessel-Faktor von Knoten A.
-	long oeffFaktor = 3917;
-	// Oeffentliches Produkt von Knoten A
-	long oeffProdukt = geheimFaktor * oeffFaktor % mod;
-	
-
-
 	/**
 	 * Erstellt eine Signatur f�r einen Nachrichhteninhalt
 	 * 
@@ -24,12 +13,10 @@ public abstract class AbstractNode extends Node {
 	 * @return
 	 */
 	public String signiere(String sender, String inhalt) {
-		
 		String a = sender;
 		int s = 32 + (int) a.charAt(0);
 		a = "" + (char) +s;
 		return a;
-
 	}
 
 	/**

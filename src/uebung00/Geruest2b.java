@@ -7,7 +7,7 @@ import javax.management.loading.MLet;
 
 public class Geruest2b extends SoFT {
 
-	private static class A extends AbstractNode {
+	private static class A extends AbstractNode2b {
 
 		@Override
 		public String runNode(String input) throws SoFTException {
@@ -36,7 +36,7 @@ public class Geruest2b extends SoFT {
 		}
 	}
 
-	private static class B extends AbstractNode {
+	private static class B extends AbstractNode2b {
 		
 		@Override
 		public String runNode(String input) throws SoFTException {
@@ -75,9 +75,10 @@ public class Geruest2b extends SoFT {
 			String signatur = tokens[1]; // Der Signaturwert ist im zweiten index des Arrays hinterlegt
 
 			// Pr�ft, ob die Nachricht tats�chlich von Knoten A stammt.
-			if (signatur != null && signatur.length() == 1) {
-				int s = (int) signatur.charAt(0);
-				if (s >= 97 && s % 2 == 1) {
+			int s = Integer.valueOf(signatur);
+			if (signatur != null && signatur.length() == 4) {
+				
+				if ((s * oeffFaktor) % mod == (komprimiere(tokens[0]) * oeffProdukt) % mod) {
 					return signatur;
 				} else {
 					return null;
