@@ -5,7 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Softlib"/>
 	<classpathentry kind="lib" path="lib/SoFTlib.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/home/sven/workspace/FTVS_SS17/lib/doc/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/FTVS_SS17/lib/SoFTlib.zip!/doc"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
