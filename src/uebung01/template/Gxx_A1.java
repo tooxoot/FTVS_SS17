@@ -4,14 +4,20 @@ import java.util.*;
 import static SoFTlib.Helper.*;
 import SoFTlib.*;
 
+/**
+ * The Nodes {B, C, D, E, F} are implemented in this class. Therefore their behavior is identical.  
+ */
 class BCDEF extends Node {
-
+	
+	//60 seconds
 	public static final long MAX_DAUER = 60 * 1000;
 
 	@Override
 	public String runNode(String input) throws SoFTException {
-
+		// currently received message
 		Msg rxMsg = null;
+		
+		// Result message for last received Message
 		Msg txMsg = null;
 		long nextTxTime = MAX_DAUER;
 
@@ -20,16 +26,21 @@ class BCDEF extends Node {
 
 			rxMsg = receive("A", nextTxTime);
 			long currentTime = time();
+			
+			//Only send the result-message if 150 ms have passed
+			// >> If a new Message is received in between this 150 ms the last result is deleted!
 			if (nextTxTime <= currentTime) {
 				if (txMsg != null)
 					txMsg.send('A');
 				nextTxTime = MAX_DAUER;
 			}
 
+			// Calculates the result or terminates
 			if (rxMsg != null) {
 				// say("got A message!");
 				switch (rxMsg.getTy()) {
 				case 'a': // Neue Auftragsnachricht
+					//Calculates the sum of the three integers given in the Message
 					int ergebnis = number(rxMsg.getCo(), 1) + number(rxMsg.getCo(), 2) + number(rxMsg.getCo(), 3);
 					txMsg = form('e', ergebnis);
 					nextTxTime = currentTime + 150;
@@ -147,6 +158,7 @@ class A extends Node {
 
 	@Override
 	public String runNode(String input) throws SoFTException {
+		
 		int erkannteFehler = 0;
 		int unerkannteFehler = 0;
 		boolean abbruch = false;
@@ -181,6 +193,6 @@ public class Gxx_A1 extends SoFT {
 
 	public static void main(String[] args) {
 		new Gxx_A1().runSystem(new Node[] { new A(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF() },
-				"Gxx_A1", "�bungsblatt 1: Redundanz", "Name");
+				"Gxx_A1", "Uebungsblatt 1: Redundanz", "Name");
 	}
 }
