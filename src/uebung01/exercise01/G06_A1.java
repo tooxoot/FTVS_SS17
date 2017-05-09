@@ -3,6 +3,7 @@ import java.util.*;
 
 import static SoFTlib.Helper.*;
 import SoFTlib.*;
+import jdk.nashorn.internal.runtime.events.RecompilationEvent;
 
 /**
  * The Nodes {B, C, D, E, F} are implemented in this class. Therefore their behavior is identical.
@@ -163,10 +164,14 @@ class A extends Node {
 		String receivers = word(input, 2, 1);
 		int receiverCount = receivers.length();
 		say("mode + receivers + receiverCount: " + mode + " " + receivers + " " + receiverCount );
-
+		
 		int erkannteFehler = 0;
 		int unerkannteFehler = 0;
 		boolean abbruch = false;
+		
+		//Array f�r den aktuellen Zustand der Knoten aus Sicht von A, Anfangs alle Knoten ff
+		//Index 0 gilt f�r Knoten B usw.
+		boolean fehlerhafte_Rechner[]={true,true,true,true,true,}; 
 		
 //		double currentTime = time();
 //		double deltaTime = 151;
@@ -233,8 +238,16 @@ class A extends Node {
 			beauftragtAeinen weiteren, noch nicht als fehlerhaft eingestuften Rechner mit dem aktuellen und
 			den nachfolgenden Aufträgen, bis alle Aufträge erfolgreich bearbeitet wurden oder aber kein fehlerfreier
 			Rechner mehr verfügbar ist. In letzterem Fall soll ein Simulationslauf vorzeitig abgebrochen werden.*/
-
+			int j = 0;
+			do{
+				//Form message and send it to the current reciever(has to be only 1!)
+				String content = erzeugeInhalt(j + 1);
+				Msg currentMessage = form('a', content);
+				currentMessage.send(receivers);		
+			}while(j++ < 10);
+		
 			break;
+		
 		case 3:
 			/*Adarf stets alle 5 Rechner nutzen, wobei zeitgleich zunächst nur die durch <Rechner> angegebenen
 			Rechner parallel rechnen. Sobald neben einer absoluten Mehrheit auch eine Minderheit ofenbar falscher
@@ -288,6 +301,6 @@ public class G06_A1 extends SoFT {
 
 	public static void main(String[] args) {
 		new G06_A1().runSystem(new Node[] { new A(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF() },
-				"Gxx_A1", "�bungsblatt 1: Redundanz", "Name");
+				"G06_A1", "�bungsblatt 1: Redundanz", "Sven und Justin");
 	}
 }
