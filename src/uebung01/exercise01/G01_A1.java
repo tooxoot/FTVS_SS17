@@ -7,7 +7,7 @@ import SoFTlib.*;
 /**
  * The Nodes {B, C, D, E, F} are implemented in this class. Therefore their behavior is identical.
  */
-class BCDEF extends Node {
+class BCDEF_ extends Node {
 
 	//60 seconds
 	public static final long MAX_DAUER = 60 * 1000;
@@ -58,7 +58,7 @@ class BCDEF extends Node {
 	}
 }
 
-class A extends Node {
+class A_ extends Node {
 
 	public static String erzeugeInhalt(int seqNr) {
 		Random r = new Random(seqNr);

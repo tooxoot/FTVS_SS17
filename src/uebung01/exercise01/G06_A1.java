@@ -287,7 +287,7 @@ public class G06_A1 extends SoFT {
 	}
 
 	public static void main(String[] args) {
-		new G01_A1().runSystem(new Node[] { new A(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF() },
+		new G06_A1().runSystem(new Node[] { new A(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF() },
 				"Gxx_A1", "�bungsblatt 1: Redundanz", "Name");
 	}
 }
