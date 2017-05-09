@@ -93,10 +93,12 @@ class A extends Node {
 	 * Prueft, ob in einem Array von Werten eine Mehrheit von mindestAnzahl gleichen Werten enthalten ist. Falls ja, dann liefert die
 	 * Methode true zurueck, sonst false.
 	 */
+	// Changed Method to work with arrays of length 1
 	static boolean istMehrheitVorhanden(int[] werte, int mindestAnzahl) {
 		if (werte.length < mindestAnzahl)
 			return false;
 		else {
+			if(werte.length == 1) return true;
 			for (int i = 0; i < werte.length; i++) {
 				int curVal = werte[i];
 				int curCount = 1;
@@ -115,10 +117,12 @@ class A extends Node {
 	 * Gibt einen Mehrheitswert aus einem Array von Werten zurueck, wobei in dem Array mindestens mindestAnzahl gleiche Werte enthalten sein
 	 * muessen (zu pruefen durch die Methode istMehrheitVorhanden).
 	 */
+	// Changed Method to work with arrays of length 1
 	static int bildeMehrheit(int[] werte, int mindestAnzahl) {
 		if (werte.length < mindestAnzahl)
 			return -100;
 		else {
+			if(werte.length == 1) return 1;
 			for (int i = 0; i < werte.length; i++) {
 				int curVal = werte[i];
 				int curCount = 1;
@@ -168,26 +172,6 @@ class A extends Node {
 		int unerkannteFehler = 0;
 		boolean abbruch = false;
 		
-//		double currentTime = time();
-//		double deltaTime = 151;
-//		int i = 1;
-//		ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
-//		while (true){
-//			
-//			if(deltaTime > 150){
-//				deltaTime = 0;
-//				String content = erzeugeInhalt(i + 1);
-//				Msg currentMessage = form('a', content);
-//				currentMessage.send(receivers);
-//			}
-//			
-//			if(receivedMessages.size() < receiverCount){
-//				
-//			}
-//			
-//			break;
-//		}
-		
 		switch (mode) {
 		case 1:
 			/* In dieser Betriebsart werden Aufträge an alle<Rechner>gleichzeitig gesendet. Nur wenn A eine absolute
@@ -196,33 +180,26 @@ class A extends Node {
 			vorzeitig abgebrochen werden.*/
 			int i = 0;
 			do {
-				// Form message and send it to all receivers
+//				// Form message and send it to all receivers
 				String content = erzeugeInhalt(i + 1);
 				Msg currentMessage = form('a', content);
 				currentMessage.send(receivers);
-				
-				// Receives all Results
-				ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
-				while(receivedMessages.size() < receiverCount){
-					Msg receivedMessage = receive(receivers, 160);
-					if( receivedMessage != null ) receivedMessages.add(receivedMessage);
-					
-					say("MSG:" + receivedMessages.size());
+				say("SENT MESSAGE NR  " + i, true);
+//				// Receives all Results
+				int[] receivedResults = new int[receiverCount];
+				for(int j = 0; j < receiverCount; j ++){
+					Msg receivedMessage = receive(receivers, 10000);
+					receivedResults[j] = number( receivedMessage.getCo() );
 				}
 				
-				// Extract Results as int
-				int[] receivedResults = new int[receivedMessages.size()];
-				for(int j = 0; j < receivedMessages.size(); j++){
-					receivedResults[j] = number( receivedMessages.get(j).getCo() );
-				}
-				
-				// Check Results and terminate if 
+//				// Check Results and terminate if 
 				if( !istMehrheitVorhanden(receivedResults, Math.round(receivedResults.length / 2)) ){
 					abbruch = true;
+					say("break:" + Math.round(receivedResults.length / 2));
 					break;
 				}
-			
-			} while(i++ < 10);
+				
+			} while(++i < 10);
 			break;
 		case 2:
 			/*In dieser Betriebsart wird immer nur ein Rechner der festgelegten<Rechner>gleichzeitig verwendet. Falls
