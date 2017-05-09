@@ -209,7 +209,8 @@ class A extends Node {
 				// Receives all Results
 				ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 				while(receivedMessages.size() < receiverCount){
-					Msg receivedMessage = receive(receivers, 160);
+					Msg receivedMessage = receive(receivers, 160); //Kommt es hier zu Problemen? Da die recieve Methode mit der globalen Zeit arbeitet? 
+					//Muss hier Möglicherweise "receive(receivers, 160*(i+1))" hin!?
 					if( receivedMessage != null ) receivedMessages.add(receivedMessage);
 					
 					say("MSG:" + receivedMessages.size());
@@ -243,7 +244,15 @@ class A extends Node {
 				//Form message and send it to the current reciever(has to be only 1!)
 				String content = erzeugeInhalt(j + 1);
 				Msg currentMessage = form('a', content);
-				currentMessage.send(receivers);		
+				currentMessage.send(receivers);
+				
+				Msg recievedMessage = receive(receivers, 160*(j+1));
+				if(recievedMessage==null){
+					currentMessage.send(receivers);
+				}
+				
+				
+				
 			}while(j++ < 10);
 		
 			break;
