@@ -100,6 +100,7 @@ class A extends Node {
 		if (werte.length < mindestAnzahl)
 			return false;
 		else {
+			if(werte.length == 1) return true;
 			for (int i = 0; i < werte.length; i++) {
 				int curVal = werte[i];
 				int curCount = 1;
@@ -122,6 +123,7 @@ class A extends Node {
 		if (werte.length < mindestAnzahl)
 			return -100;
 		else {
+			if(werte.length == 1) return 1;
 			for (int i = 0; i < werte.length; i++) {
 				int curVal = werte[i];
 				int curCount = 1;
@@ -232,25 +234,33 @@ class A extends Node {
 			vorzeitig abgebrochen werden.*/
 			int i = 0;
 			do {
-//				// Form message and send it to all receivers
+				// Form message and send it to all receivers
 				String content = erzeugeInhalt(i + 1);
 				Msg currentMessage = form('a', content);
 				currentMessage.send(receivers);
-				say("SENT MESSAGE NR  " + i, true);
-//				// Receives all Results
-				int[] receivedResults = new int[receiverCount];
-				for(int j = 0; j < receiverCount; j ++){
-					Msg receivedMessage = receive(receivers, 10000);
-					receivedResults[j] = number( receivedMessage.getCo() );
+				say("SEND MESSAGE NR  " + i, true);
+
+				ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
+
+				// Maximum time waited to receive all result=messages
+				double maxWaitingPeriod = receiverCount * 2 * 200;
+				double startingTime = time();
+				while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
+					Msg receivedMessage = receive(receivers, time() + 200);
+					if(receivedMessage != null) receivedMessages.add( receivedMessage );
 				}
 
-//				// Check Results and terminate if
-				if( !istMehrheitVorhanden(receivedResults, Math.round(receivedResults.length / 2)) ){
+				int[] receivedResults = new int[receivedMessages.size()];
+				for(int j = 0; j < receivedMessages.size(); j++){
+					receivedResults[j] = number( receivedMessages.get(j).getCo() );
+				}
+
+				// Check Results and terminate if no majority is found
+				if( !istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
 					abbruch = true;
-					say("break:" + Math.round(receivedResults.length / 2));
+					say("ABORT");
 					break;
 				}
-
 			} while(++i < 10);
 			break;
 		case 2:
