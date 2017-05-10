@@ -232,36 +232,38 @@ class A extends Node {
 			Mehrheit gleicher Ergebnisse empfängt, gilt die Bearbeitung des Auftrags aus der Sichtweise von A als
 			korrekt. Falls keine absolute Mehrheit gebildet werden konnte, soll der entsprechende Simulationslauf
 			vorzeitig abgebrochen werden.*/
-			int i = 0;
-			do {
-				// Form message and send it to all receivers
-				String content = erzeugeInhalt(i + 1);
-				Msg currentMessage = form('a', content);
-				currentMessage.send(receivers);
-				say("SEND MESSAGE NR  " + i, true);
+			{
+				int i = 0;
+				do {
+					// Form message and send it to all receivers
+					String content = erzeugeInhalt(i + 1);
+					Msg currentMessage = form('a', content);
+					currentMessage.send(receivers);
+					say("SEND MESSAGE NR  " + i, true);
 
-				ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
+					ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 
-				// Maximum time waited to receive all result=messages
-				double maxWaitingPeriod = receiverCount * 2 * 200;
-				double startingTime = time();
-				while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
-					Msg receivedMessage = receive(receivers, time() + 200);
-					if(receivedMessage != null) receivedMessages.add( receivedMessage );
-				}
+					// Maximum time waited to receive all result=messages
+					double maxWaitingPeriod = receiverCount * 2 * 200;
+					double startingTime = time();
+					while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
+						Msg receivedMessage = receive(receivers, time() + 200);
+						if(receivedMessage != null) receivedMessages.add( receivedMessage );
+					}
 
-				int[] receivedResults = new int[receivedMessages.size()];
-				for(int j = 0; j < receivedMessages.size(); j++){
-					receivedResults[j] = number( receivedMessages.get(j).getCo() );
-				}
+					int[] receivedResults = new int[receivedMessages.size()];
+					for(int j = 0; j < receivedMessages.size(); j++){
+						receivedResults[j] = number( receivedMessages.get(j).getCo() );
+					}
 
-				// Check Results and terminate if no majority is found
-				if( !istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
-					abbruch = true;
-					say("ABORT");
-					break;
-				}
-			} while(++i < 10);
+					// Check Results and terminate if no majority is found
+					if( !istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
+						abbruch = true;
+						say("ABORT");
+						break;
+					}
+				} while(++i < 10);
+			}
 			break;
 		case 2:
 			/*In dieser Betriebsart wird immer nur ein Rechner der festgelegten<Rechner>gleichzeitig verwendet. Falls
@@ -272,44 +274,45 @@ class A extends Node {
 			beauftragtAeinen weiteren, noch nicht als fehlerhaft eingestuften Rechner mit dem aktuellen und
 			den nachfolgenden Aufträgen, bis alle Aufträge erfolgreich bearbeitet wurden oder aber kein fehlerfreier
 			Rechner mehr verfügbar ist. In letzterem Fall soll ein Simulationslauf vorzeitig abgebrochen werden.*/
-			int j = 0;
-			do{
-				//Form message and send it to the current reciever(has to be only 1!)
-				String content = erzeugeInhalt(j + 1);
-				Msg currentMessage = form('a', content);
+			{
+				int j = 0;
+				do{
+					//Form message and send it to the current reciever(has to be only 1!)
+					String content = erzeugeInhalt(j + 1);
+					Msg currentMessage = form('a', content);
 
-				//pr�fe ob der aktuelle Empf�nger nicht bereits als Fehlerhaft eingestuft ist
-				int Abbruchzaehler=0;
-				while(fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]==false){
-					int temp = fehlerhafteRechnerStrtoInt(receivers);
-					int neuerEmpfaenger=(temp+1)%5;
-					receivers=fehlerhafteRechnerInttoStr(neuerEmpfaenger);
-					Abbruchzaehler++;
-					if(Abbruchzaehler > 5){ //Alle Empf�nger sind fehlerhaft
-						abbruch=true;
-						break;
-					}
-				}
-				if(abbruch==true) break;
-
-
-					currentMessage.send(receivers); //Nachricht senden
-
-					Msg recievedMessage = receive(receivers, time()+160);
-					//Falls Keine Nachricht ankommt oder wenn der Test negativ ausgewertet wird, wird die Nachricht erneut versendet
-					if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
-						currentMessage.send(receivers);
-						recievedMessage = receive(receivers, time()+160);
-						if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
-							fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]=false; //Der Rechner gilt als Fehlerhaft und wird deshalb auf false gesetzt
+					//pr�fe ob der aktuelle Empf�nger nicht bereits als Fehlerhaft eingestuft ist
+					int Abbruchzaehler=0;
+					while(fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]==false){
+						int temp = fehlerhafteRechnerStrtoInt(receivers);
+						int neuerEmpfaenger=(temp+1)%5;
+						receivers=fehlerhafteRechnerInttoStr(neuerEmpfaenger);
+						Abbruchzaehler++;
+						if(Abbruchzaehler > 5){ //Alle Empf�nger sind fehlerhaft
+							abbruch=true;
+							break;
 						}
 					}
+					if(abbruch==true) break;
+
+
+						currentMessage.send(receivers); //Nachricht senden
+
+						Msg recievedMessage = receive(receivers, time()+160);
+						//Falls Keine Nachricht ankommt oder wenn der Test negativ ausgewertet wird, wird die Nachricht erneut versendet
+						if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
+							currentMessage.send(receivers);
+							recievedMessage = receive(receivers, time()+160);
+							if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
+								fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]=false; //Der Rechner gilt als Fehlerhaft und wird deshalb auf false gesetzt
+							}
+						}
 
 
 
 
-			}while(j++ < 10);
-
+				}while(j++ < 10);
+			}
 			break;
 
 		case 3:
@@ -345,6 +348,9 @@ class A extends Node {
 
 					// Check Results and terminate if no majority is found
 					if( istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
+						int majority = bildeMehrheit( receivedResults, Math.round(receivedMessages.size() / 2) );
+
+						for( int j = 0; j < receivedResults.length; j++){}
 
 					} else {
 						abbruch = true;
