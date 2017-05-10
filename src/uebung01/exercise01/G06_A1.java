@@ -172,10 +172,10 @@ class A extends Node {
 		}
 		return -1;
 	}
-	
-	
+
+
 	public String fehlerhafteRechnerInttoStr(int Input){
-		
+
 			switch (Input) {
 			case 0: return "B";
 			case 1: return "C";
@@ -184,9 +184,9 @@ class A extends Node {
 			case 4: return "F";
 			default: return null;
 			}
-		
+
 	}
-	
+
 	@Override
 	public String runNode(String input) throws SoFTException {
 		//The word's and items's numbering is 1 based, meaning the first word is assignet to 1.
@@ -194,36 +194,36 @@ class A extends Node {
 		String receivers = word(input, 2, 1);
 		int receiverCount = receivers.length();
 		say("mode + receivers + receiverCount: " + mode + " " + receivers + " " + receiverCount );
-		
+
 		int erkannteFehler = 0;
 		int unerkannteFehler = 0;
 		boolean abbruch = false;
-		
-		//Array für den aktuellen Zustand der Knoten aus Sicht von A, Anfangs alle Knoten ff
-		//Index 0 gilt für Knoten B usw.
-		boolean fehlerhafte_Rechner[]={true,true,true,true,true,}; 
-		
-		
+
+		//Array fï¿½r den aktuellen Zustand der Knoten aus Sicht von A, Anfangs alle Knoten ff
+		//Index 0 gilt fï¿½r Knoten B usw.
+		boolean fehlerhafte_Rechner[]={true,true,true,true,true,};
+
+
 //		double currentTime = time();
 //		double deltaTime = 151;
 //		int i = 1;
 //		ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 //		while (true){
-//			
+//
 //			if(deltaTime > 150){
 //				deltaTime = 0;
 //				String content = erzeugeInhalt(i + 1);
 //				Msg currentMessage = form('a', content);
 //				currentMessage.send(receivers);
 //			}
-//			
+//
 //			if(receivedMessages.size() < receiverCount){
-//				
+//
 //			}
-//			
+//
 //			break;
 //		}
-		
+
 		switch (mode) {
 		case 1:
 			/* In dieser Betriebsart werden AuftrÃ¤ge an alle<Rechner>gleichzeitig gesendet. Nur wenn A eine absolute
@@ -232,34 +232,26 @@ class A extends Node {
 			vorzeitig abgebrochen werden.*/
 			int i = 0;
 			do {
-				// Form message and send it to all receivers
+//				// Form message and send it to all receivers
 				String content = erzeugeInhalt(i + 1);
 				Msg currentMessage = form('a', content);
 				currentMessage.send(receivers);
-				
-				// Receives all Results
-				ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
-				while(receivedMessages.size() < receiverCount){
-					Msg receivedMessage = receive(receivers, 160); //Kommt es hier zu Problemen? Da die recieve Methode mit der globalen Zeit arbeitet? 
-					//Muss hier Möglicherweise "receive(receivers, 160*(i+1))" hin!?
-					if( receivedMessage != null ) receivedMessages.add(receivedMessage);
-					
-					say("MSG:" + receivedMessages.size());
+				say("SENT MESSAGE NR  " + i, true);
+//				// Receives all Results
+				int[] receivedResults = new int[receiverCount];
+				for(int j = 0; j < receiverCount; j ++){
+					Msg receivedMessage = receive(receivers, 10000);
+					receivedResults[j] = number( receivedMessage.getCo() );
 				}
-				
-				// Extract Results as int
-				int[] receivedResults = new int[receivedMessages.size()];
-				for(int j = 0; j < receivedMessages.size(); j++){
-					receivedResults[j] = number( receivedMessages.get(j).getCo() );
-				}
-				
-				// Check Results and terminate if 
+
+//				// Check Results and terminate if
 				if( !istMehrheitVorhanden(receivedResults, Math.round(receivedResults.length / 2)) ){
 					abbruch = true;
+					say("break:" + Math.round(receivedResults.length / 2));
 					break;
 				}
-			
-			} while(i++ < 10);
+
+			} while(++i < 10);
 			break;
 		case 2:
 			/*In dieser Betriebsart wird immer nur ein Rechner der festgelegten<Rechner>gleichzeitig verwendet. Falls
@@ -275,24 +267,24 @@ class A extends Node {
 				//Form message and send it to the current reciever(has to be only 1!)
 				String content = erzeugeInhalt(j + 1);
 				Msg currentMessage = form('a', content);
-				
-				//prüfe ob der aktuelle Empfänger nicht bereits als Fehlerhaft eingestuft ist
-				int Abbruchzähler=0;
+
+				//prï¿½fe ob der aktuelle Empfï¿½nger nicht bereits als Fehlerhaft eingestuft ist
+				int Abbruchzaehler=0;
 				while(fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]==false){
 					int temp = fehlerhafteRechnerStrtoInt(receivers);
-					int neuerEmpfänger=(temp+1)%5;
-					receivers=fehlerhafteRechnerInttoStr(neuerEmpfänger);
-					Abbruchzähler++;
-					if(Abbruchzähler > 5){ //Alle Empfänger sind fehlerhaft
+					int neuerEmpfaenger=(temp+1)%5;
+					receivers=fehlerhafteRechnerInttoStr(neuerEmpfaenger);
+					Abbruchzaehler++;
+					if(Abbruchzaehler > 5){ //Alle Empfï¿½nger sind fehlerhaft
 						abbruch=true;
 						break;
 					}
 				}
 				if(abbruch==true) break;
-				
-					
+
+
 					currentMessage.send(receivers); //Nachricht senden
-					
+
 					Msg recievedMessage = receive(receivers, time()+160);
 					//Falls Keine Nachricht ankommt oder wenn der Test negativ ausgewertet wird, wird die Nachricht erneut versendet
 					if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
@@ -302,14 +294,14 @@ class A extends Node {
 							fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]=false; //Der Rechner gilt als Fehlerhaft und wird deshalb auf false gesetzt
 						}
 					}
-				
-				
-				
-				
+
+
+
+
 			}while(j++ < 10);
-		
+
 			break;
-		
+
 		case 3:
 			/*Adarf stets alle 5 Rechner nutzen, wobei zeitgleich zunÃ¤chst nur die durch <Rechner> angegebenen
 			Rechner parallel rechnen. Sobald neben einer absoluten Mehrheit auch eine Minderheit ofenbar falscher
