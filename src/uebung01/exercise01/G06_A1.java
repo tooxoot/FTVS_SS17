@@ -1,6 +1,8 @@
 package uebung01.exercise01;
 import java.util.*;
 
+import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
+
 import static SoFTlib.Helper.*;
 import SoFTlib.*;
 import jdk.nashorn.internal.runtime.events.RecompilationEvent;
@@ -157,6 +159,34 @@ class A extends Node {
 		return r;
 	}
 
+	public int fehlerhafteRechnerStrtoInt(String Input){
+		if(Input.length()==1){
+			switch (Input) {
+			case "B": return 0;
+			case "C": return 1;
+			case "D": return 2;
+			case "E": return 3;
+			case "F": return 4;
+			default: return -1;
+			}
+		}
+		return -1;
+	}
+	
+	
+	public String fehlerhafteRechnerInttoStr(int Input){
+		
+			switch (Input) {
+			case 0: return "B";
+			case 1: return "C";
+			case 2: return "D";
+			case 3: return "E";
+			case 4: return "F";
+			default: return null;
+			}
+		
+	}
+	
 	@Override
 	public String runNode(String input) throws SoFTException {
 		//The word's and items's numbering is 1 based, meaning the first word is assignet to 1.
@@ -172,6 +202,7 @@ class A extends Node {
 		//Array für den aktuellen Zustand der Knoten aus Sicht von A, Anfangs alle Knoten ff
 		//Index 0 gilt für Knoten B usw.
 		boolean fehlerhafte_Rechner[]={true,true,true,true,true,}; 
+		
 		
 //		double currentTime = time();
 //		double deltaTime = 151;
@@ -244,12 +275,34 @@ class A extends Node {
 				//Form message and send it to the current reciever(has to be only 1!)
 				String content = erzeugeInhalt(j + 1);
 				Msg currentMessage = form('a', content);
-				currentMessage.send(receivers);
 				
-				Msg recievedMessage = receive(receivers, 160*(j+1));
-				if(recievedMessage==null){
-					currentMessage.send(receivers);
+				//prüfe ob der aktuelle Empfänger nicht bereits als Fehlerhaft eingestuft ist
+				int Abbruchzähler=0;
+				while(fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]==false){
+					int temp = fehlerhafteRechnerStrtoInt(receivers);
+					int neuerEmpfänger=(temp+1)%5;
+					receivers=fehlerhafteRechnerInttoStr(neuerEmpfänger);
+					Abbruchzähler++;
+					if(Abbruchzähler > 5){ //Alle Empfänger sind fehlerhaft
+						abbruch=true;
+						break;
+					}
 				}
+				if(abbruch==true) break;
+				
+					
+					currentMessage.send(receivers); //Nachricht senden
+					
+					Msg recievedMessage = receive(receivers, time()+160);
+					//Falls Keine Nachricht ankommt oder wenn der Test negativ ausgewertet wird, wird die Nachricht erneut versendet
+					if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
+						currentMessage.send(receivers);
+						recievedMessage = receive(receivers, time()+160);
+						if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
+							fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]=false; //Der Rechner gilt als Fehlerhaft und wird deshalb auf false gesetzt
+						}
+					}
+				
 				
 				
 				
