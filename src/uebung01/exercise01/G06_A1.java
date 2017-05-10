@@ -324,6 +324,12 @@ class A extends Node {
 			abgebrochen werden.*/
 			{
 				int i = 0;
+				String backupReceivers = "BCDEF";
+				for( String receiver : receivers.split("(?!^)") ){
+					backupReceivers = backupReceivers.replaceAll(receiver, "");
+				}
+				say(backupReceivers);
+
 				do {
 					// Form message and send it to all receivers
 					String content = erzeugeInhalt(i + 1);
@@ -350,7 +356,10 @@ class A extends Node {
 					if( istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
 						int majority = bildeMehrheit( receivedResults, Math.round(receivedMessages.size() / 2) );
 
-						for( int j = 0; j < receivedResults.length; j++){}
+						for( int j = 0; j < receivedResults.length; j++)
+							if(receivedResults[j] != majority){
+
+							}
 
 					} else {
 						abbruch = true;
