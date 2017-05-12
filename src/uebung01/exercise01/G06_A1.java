@@ -364,22 +364,30 @@ class A extends Node {
 					if( istMehrheitVorhanden( receivedResults, (int)Math.round(receivedMessages.size() / 2.0)) ){
 						int majority = bildeMehrheit( receivedResults, (int)Math.round(receivedMessages.size() / 2.0) );
 						say("Majority:" + majority + "  " + (int)Math.round(receivedMessages.size() / 2.0));
+						
+						// If a majority was found all receivers which were not providing this result are replaced by one of the backup receivers
 						for( int j = 0; j < receivedResults.length; j++)
 							if(receivedResults[j] != majority){
-								String sender = ( "" + receivedMessages.get(j).getSe() ).toUpperCase();
-								say("CorruptSender:" + sender);
-								backupReceiverQueue.add( sender );
-								receivers = receivers.replace(sender, backupReceiverQueue.poll() );
+								// Gets the corrupt receiver ...
+								String corruptReceiver = ( "" + receivedMessages.get(j).getSe() ).toUpperCase();
+								say("CorruptSender:" + corruptReceiver);
+								backupReceiverQueue.add( corruptReceiver );
+								// ... and replaces it with a backup
+								receivers = receivers.replace(corruptReceiver, backupReceiverQueue.poll() );
 								say("new Receivers Content: " + receivers);
 							}
 						
+						// If the number of receivers is bigger than the number of received results, all silent receicers are replaced
 						if( receivedResults.length < receivers.length() ){
+							// Gets all current receivers ...
 							String receiversNotFound = "" + receivers;
 							
+							// ... and deletes the ones from which a message was received.
 							for (Msg message : receivedMessages) {
 								receiversNotFound = receiversNotFound.replace( ("" + message.getSe()).toUpperCase(), "");
 							}
 							
+							// Replaces the silent receivers.
 							for( String receiverNotFound : receiversNotFound.split("(?!^)") ){
 								backupReceiverQueue.add(receiverNotFound);
 								receivers = receivers.replace(receiverNotFound, backupReceiverQueue.poll());
