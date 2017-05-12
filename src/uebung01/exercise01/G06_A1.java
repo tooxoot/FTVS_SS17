@@ -257,7 +257,7 @@ class A extends Node {
 					}
 
 					// Check Results and terminate if no majority is found
-					if( !istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
+					if( !istMehrheitVorhanden( receivedResults, (int)Math.round((receivedMessages.size() / 2.0)) )){
 						abbruch = true;
 						say("ABORT");
 						break;
@@ -317,13 +317,24 @@ class A extends Node {
 
 		case 3:
 			/*A darf stets alle 5 Rechner nutzen, wobei zeitgleich zunächst nur die durch <Rechner> angegebenen
-			Rechner parallel rechnen. Sobald neben einer absoluten Mehrheit auch eine Minderheit ofenbar falscher
+			Rechner parallel rechnen. Sobald neben einer absoluten Mehrheit auch eine Minderheit offenbar falscher
 			oder fehlender Ergebnisse vorliegt, sollen die Rechner dieser falschen bzw. fehlenden Ergebnisse aus-
 			gegliedert und durch andere, bislang ungenutzte Rechner für nachfolgende Rechnungen ersetzt werden.
 			Falls keine absolute Mehrheit gebildet werden konnte, soll der entsprechende Simulationslauf vorzeitig
 			abgebrochen werden.*/
 			{
 				int i = 0;
+				String backupReceivers = "BCDEF";
+				for( String receiver : receivers.split("(?!^)") ){
+					backupReceivers = backupReceivers.replaceAll(receiver, "");
+				}
+				say("BackupReceivers:" + backupReceivers);
+				
+				ArrayDeque<String> backupReceiverQueue = new ArrayDeque<String>();
+				for (String backupReceiver : backupReceivers.split("(?!^)")) {
+					backupReceiverQueue.add(backupReceiver);
+				}
+
 				do {
 					// Form message and send it to all receivers
 					String content = erzeugeInhalt(i + 1);
@@ -345,13 +356,45 @@ class A extends Node {
 					for(int j = 0; j < receivedMessages.size(); j++){
 						receivedResults[j] = number( receivedMessages.get(j).getCo() );
 					}
+					//TODO delete print out
+					String rrP = "";
+					for(int k : receivedResults) rrP += " + " + k; 
 
 					// Check Results and terminate if no majority is found
-					if( istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
-						int majority = bildeMehrheit( receivedResults, Math.round(receivedMessages.size() / 2) );
-
-						for( int j = 0; j < receivedResults.length; j++){}
-
+					if( istMehrheitVorhanden( receivedResults, (int)Math.round(receivedMessages.size() / 2.0)) ){
+						int majority = bildeMehrheit( receivedResults, (int)Math.round(receivedMessages.size() / 2.0) );
+						say("Majority:" + majority + "  " + (int)Math.round(receivedMessages.size() / 2.0));
+						
+						// If a majority was found all receivers which were not providing this result are replaced by one of the backup receivers
+						for( int j = 0; j < receivedResults.length; j++)
+							if(receivedResults[j] != majority){
+								// Gets the corrupt receiver ...
+								String corruptReceiver = ( "" + receivedMessages.get(j).getSe() ).toUpperCase();
+								say("CorruptSender:" + corruptReceiver);
+								backupReceiverQueue.add( corruptReceiver );
+								// ... and replaces it with a backup
+								receivers = receivers.replace(corruptReceiver, backupReceiverQueue.poll() );
+								say("new Receivers Content: " + receivers);
+							}
+						
+						// If the number of receivers is bigger than the number of received results, all silent receicers are replaced
+						if( receivedResults.length < receivers.length() ){
+							// Gets all current receivers ...
+							String receiversNotFound = "" + receivers;
+							
+							// ... and deletes the ones from which a message was received.
+							for (Msg message : receivedMessages) {
+								receiversNotFound = receiversNotFound.replace( ("" + message.getSe()).toUpperCase(), "");
+							}
+							
+							// Replaces the silent receivers.
+							for( String receiverNotFound : receiversNotFound.split("(?!^)") ){
+								backupReceiverQueue.add(receiverNotFound);
+								receivers = receivers.replace(receiverNotFound, backupReceiverQueue.poll());
+							}
+							say("new Receivers Omit: " + receivers);
+						}
+						
 					} else {
 						abbruch = true;
 						say("ABORT");
