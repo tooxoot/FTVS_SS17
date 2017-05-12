@@ -257,7 +257,7 @@ class A extends Node {
 					}
 
 					// Check Results and terminate if no majority is found
-					if( !istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
+					if( !istMehrheitVorhanden( receivedResults, (int)Math.round((receivedMessages.size() / 2.0)) )){
 						abbruch = true;
 						say("ABORT");
 						break;
@@ -361,14 +361,15 @@ class A extends Node {
 					for(int k : receivedResults) rrP += " + " + k; 
 
 					// Check Results and terminate if no majority is found
-					if( istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
-						int majority = bildeMehrheit( receivedResults, Math.round(receivedMessages.size() / 2) );
-						
+					if( istMehrheitVorhanden( receivedResults, (int)Math.round(receivedMessages.size() / 2.0)) ){
+						int majority = bildeMehrheit( receivedResults, (int)Math.round(receivedMessages.size() / 2.0) );
+						say("Majority:" + majority + "  " + (int)Math.round(receivedMessages.size() / 2.0));
 						for( int j = 0; j < receivedResults.length; j++)
 							if(receivedResults[j] != majority){
 								String sender = ( "" + receivedMessages.get(j).getSe() ).toUpperCase();
+								say("CorruptSender:" + sender);
 								backupReceiverQueue.add( sender );
-								receivers.replace(sender, backupReceiverQueue.poll() );
+								receivers = receivers.replace(sender, backupReceiverQueue.poll() );
 								say("new Receivers Content: " + receivers);
 							}
 						
@@ -376,12 +377,12 @@ class A extends Node {
 							String receiversNotFound = "" + receivers;
 							
 							for (Msg message : receivedMessages) {
-								receiversNotFound.replace( ("" + message.getSe()).toUpperCase(), "");
+								receiversNotFound = receiversNotFound.replace( ("" + message.getSe()).toUpperCase(), "");
 							}
 							
 							for( String receiverNotFound : receiversNotFound.split("(?!^)") ){
 								backupReceiverQueue.add(receiverNotFound);
-								receivers.replace(receiverNotFound, backupReceiverQueue.poll());
+								receivers = receivers.replace(receiverNotFound, backupReceiverQueue.poll());
 							}
 							say("new Receivers Omit: " + receivers);
 						}
