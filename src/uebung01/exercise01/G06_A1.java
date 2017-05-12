@@ -324,12 +324,15 @@ class A extends Node {
 			abgebrochen werden.*/
 			{
 				int i = 0;
+				
+				// Determines all receivers currently unused.
 				String backupReceivers = "BCDEF";
 				for( String receiver : receivers.split("(?!^)") ){
 					backupReceivers = backupReceivers.replaceAll(receiver, "");
 				}
 				say("BackupReceivers:" + backupReceivers);
 				
+				// Creates a FIFO queue for the backup receivers
 				ArrayDeque<String> backupReceiverQueue = new ArrayDeque<String>();
 				for (String backupReceiver : backupReceivers.split("(?!^)")) {
 					backupReceiverQueue.add(backupReceiver);
@@ -412,7 +415,75 @@ class A extends Node {
 			auch die Anzahl der notwendigen gleichen Ergebnisse, die eine absolute Mehrheit bilden. Falls nur noch
 			ein Rechner als fehlerfrei gilt oder aber keine absolute Mehrheit mehr gebildet werden konnte, soll der
 			entsprechende Simulationslauf vorzeitig abgebrochen werden.*/
-
+			{
+				receivers = "BCDEF";
+				int i = 0;
+				
+				do {
+					// Form message and send it to all receivers
+					String content = erzeugeInhalt(i + 1);
+					Msg currentMessage = form('a', content);
+					currentMessage.send(receivers);
+					say("SEND MESSAGE NR  " + i, true);
+	
+					ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
+	
+					// Maximum time waited to receive all result=messages
+					double maxWaitingPeriod = receiverCount * 2 * 200;
+					double startingTime = time();
+					while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
+						Msg receivedMessage = receive(receivers, time() + 200);
+						if(receivedMessage != null) receivedMessages.add( receivedMessage );
+					}
+	
+					int[] receivedResults = new int[receivedMessages.size()];
+					for(int j = 0; j < receivedMessages.size(); j++){
+						receivedResults[j] = number( receivedMessages.get(j).getCo() );
+					}
+					//TODO delete print out
+					String rrP = "";
+					for(int k : receivedResults) rrP += " + " + k; 
+	
+					// Check Results and terminate if no majority is found
+					if( !receivers.equals("") && istMehrheitVorhanden( receivedResults, (int)Math.round(receivedMessages.size() / 2.0)) ){
+						int majority = bildeMehrheit( receivedResults, (int)Math.round(receivedMessages.size() / 2.0) );
+						say("Majority:" + majority + "  " + (int)Math.round(receivedMessages.size() / 2.0));
+						
+						// If a majority was found all receivers which were not providing this result are replaced by one of the backup receivers
+						for( int j = 0; j < receivedResults.length; j++)
+							if(receivedResults[j] != majority){
+								// Gets the corrupt receiver ...
+								String corruptReceiver = ( "" + receivedMessages.get(j).getSe() ).toUpperCase();
+								say("CorruptSender:" + corruptReceiver);
+								// ... and deletes it from the receiver list
+								receivers = receivers.replace(corruptReceiver, "" );
+								say("new Receivers Content: " + receivers);
+							}
+						
+						// If the number of receivers is bigger than the number of received results, all silent receicers are replaced
+						if( receivedResults.length < receivers.length() ){
+							// Gets all current receivers ...
+							String receiversNotFound = "" + receivers;
+							
+							// ... and deletes the ones from which a message was received.
+							for (Msg message : receivedMessages) {
+								receiversNotFound = receiversNotFound.replace( ("" + message.getSe()).toUpperCase(), "");
+							}
+							
+							// Replaces the silent receivers.
+							for( String receiverNotFound : receiversNotFound.split("(?!^)") ){
+								receivers = receivers.replace(receiverNotFound, "");
+							}
+							say("new Receivers Omit: " + receivers);
+						}
+						
+					} else {
+						abbruch = true;
+						say("ABORT");
+						break;
+					}
+				} while(++i < 10);
+		}
 			break;
 		default:
 			break;
