@@ -317,7 +317,7 @@ class A extends Node {
 
 		case 3:
 			/*A darf stets alle 5 Rechner nutzen, wobei zeitgleich zunächst nur die durch <Rechner> angegebenen
-			Rechner parallel rechnen. Sobald neben einer absoluten Mehrheit auch eine Minderheit ofenbar falscher
+			Rechner parallel rechnen. Sobald neben einer absoluten Mehrheit auch eine Minderheit offenbar falscher
 			oder fehlender Ergebnisse vorliegt, sollen die Rechner dieser falschen bzw. fehlenden Ergebnisse aus-
 			gegliedert und durch andere, bislang ungenutzte Rechner für nachfolgende Rechnungen ersetzt werden.
 			Falls keine absolute Mehrheit gebildet werden konnte, soll der entsprechende Simulationslauf vorzeitig
@@ -328,7 +328,12 @@ class A extends Node {
 				for( String receiver : receivers.split("(?!^)") ){
 					backupReceivers = backupReceivers.replaceAll(receiver, "");
 				}
-				say(backupReceivers);
+				say("BackupReceivers:" + backupReceivers);
+				
+				ArrayDeque<String> backupReceiverQueue = new ArrayDeque<String>();
+				for (String backupReceiver : backupReceivers.split("(?!^)")) {
+					backupReceiverQueue.add(backupReceiver);
+				}
 
 				do {
 					// Form message and send it to all receivers
@@ -351,16 +356,36 @@ class A extends Node {
 					for(int j = 0; j < receivedMessages.size(); j++){
 						receivedResults[j] = number( receivedMessages.get(j).getCo() );
 					}
+					//TODO delete print out
+					String rrP = "";
+					for(int k : receivedResults) rrP += " + " + k; 
 
 					// Check Results and terminate if no majority is found
 					if( istMehrheitVorhanden( receivedResults, Math.round(receivedMessages.size() / 2)) ){
 						int majority = bildeMehrheit( receivedResults, Math.round(receivedMessages.size() / 2) );
-
+						
 						for( int j = 0; j < receivedResults.length; j++)
 							if(receivedResults[j] != majority){
-
+								String sender = ( "" + receivedMessages.get(j).getSe() ).toUpperCase();
+								backupReceiverQueue.add( sender );
+								receivers.replace(sender, backupReceiverQueue.poll() );
+								say("new Receivers Content: " + receivers);
 							}
-
+						
+						if( receivedResults.length < receivers.length() ){
+							String receiversNotFound = "" + receivers;
+							
+							for (Msg message : receivedMessages) {
+								receiversNotFound.replace( ("" + message.getSe()).toUpperCase(), "");
+							}
+							
+							for( String receiverNotFound : receiversNotFound.split("(?!^)") ){
+								backupReceiverQueue.add(receiverNotFound);
+								receivers.replace(receiverNotFound, backupReceiverQueue.poll());
+							}
+							say("new Receivers Omit: " + receivers);
+						}
+						
 					} else {
 						abbruch = true;
 						say("ABORT");
