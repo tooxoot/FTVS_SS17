@@ -417,9 +417,12 @@ class A extends Node {
 			entsprechende Simulationslauf vorzeitig abgebrochen werden.*/
 			{
 				receivers = "BCDEF";
+				
+				
 				int i = 0;
 				
 				do {
+					receiverCount = receivers.length();
 					// Form message and send it to all receivers
 					String content = erzeugeInhalt(i + 1);
 					Msg currentMessage = form('a', content);
