@@ -275,7 +275,7 @@ class A extends Node {
 			den nachfolgenden Aufträgen, bis alle Aufträge erfolgreich bearbeitet wurden oder aber kein fehlerfreier
 			Rechner mehr verfügbar ist. In letzterem Fall soll ein Simulationslauf vorzeitig abgebrochen werden.*/
 			{
-				int j = 0;
+				int j = 0; //Test f�r Branch
 				do{
 					//Form message and send it to the current reciever(has to be only 1!)
 					String content = erzeugeInhalt(j + 1);
