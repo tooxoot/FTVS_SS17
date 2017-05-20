@@ -201,9 +201,7 @@ class A extends Node {
 		int unerkannteFehler = 0;
 		boolean abbruch = false;
 
-		//Array fï¿½r den aktuellen Zustand der Knoten aus Sicht von A, Anfangs alle Knoten ff
-		//Index 0 gilt fï¿½r Knoten B usw.
-		boolean fehlerhafte_Rechner[]={true,true,true,true,true,};
+		
 
 
 //		double currentTime = time();
@@ -275,7 +273,16 @@ class A extends Node {
 			den nachfolgenden AuftrÃ¤gen, bis alle AuftrÃ¤ge erfolgreich bearbeitet wurden oder aber kein fehlerfreier
 			Rechner mehr verfÃ¼gbar ist. In letzterem Fall soll ein Simulationslauf vorzeitig abgebrochen werden.*/
 			{
-				int j = 0; //Test für Editor
+				
+				//recievers enthealt die zu verwendetetn Rechner daraus muss einer ausgewaehlt werden
+				
+				boolean fehlerhafte_Rechner[]={false,false,false,false,false,};
+				for( String receiver : receivers.split("(?!^)") ){
+				fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receiver)]=true;
+				}
+				receivers="B";
+				
+				int j = 0; //Test für 
 				do{
 					//Form message and send it to the current reciever(has to be only 1!)
 					String content = erzeugeInhalt(j + 1);
@@ -298,11 +305,11 @@ class A extends Node {
 
 						currentMessage.send(receivers); //Nachricht senden
 
-						Msg recievedMessage = receive(receivers, time()+160);
+						Msg recievedMessage = receive(receivers, time()+200);
 						//Falls Keine Nachricht ankommt oder wenn der Test negativ ausgewertet wird, wird die Nachricht erneut versendet
 						if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
 							currentMessage.send(receivers);
-							recievedMessage = receive(receivers, time()+160);
+							recievedMessage = receive(receivers, time()+200);
 							if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
 								fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]=false; //Der Rechner gilt als Fehlerhaft und wird deshalb auf false gesetzt
 							}
@@ -520,6 +527,6 @@ public class G06_A1 extends SoFT {
 
 	public static void main(String[] args) {
 		new G06_A1().runSystem(new Node[] { new A(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF() },
-				"G06_A1", "ï¿½bungsblatt 1: Redundanz", "Sven und Justin");
+				"G06_A1", "Uebungsblatt 1: Redundanz", "Sven und Justin");
 	}
 }
