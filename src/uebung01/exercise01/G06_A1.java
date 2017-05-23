@@ -41,7 +41,7 @@ class BCDEF extends Node {
 
 			// Calculates the result or terminates
 			if (rxMsg != null) {
-				// say("got A message!");
+				 //say("got A message!");
 				switch (rxMsg.getTy()) {
 				case 'a': // Neue Auftragsnachricht
 					//Calculates the sum of the three integers given in the Message
@@ -288,7 +288,7 @@ class A extends Node {
 					//Form message and send it to the current reciever(has to be only 1!)
 					String content = erzeugeInhalt(j + 1);
 					Msg currentMessage = form('a', content);
-					say("Message made", true);
+					//say("Message made", true);
 					
 					
 					
@@ -318,6 +318,7 @@ class A extends Node {
 						Msg recievedMessage = receive(receivers, time()+200);
 						//Falls Keine Nachricht ankommt oder wenn der Test negativ ausgewertet wird, wird die Nachricht erneut versendet
 						if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
+							erkannteFehler++;	//Die Nachricht ist nicht angekommen oder wurde von Knoten A als Fehlerhaft eingestuft
 							currentMessage.send(receivers);
 							say("SEND MESSAGE NR  " + j +" Again", true);
 							recievedMessage = receive(receivers, time()+200);
@@ -325,10 +326,17 @@ class A extends Node {
 								fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]=false; //Der Rechner gilt als Fehlerhaft und wird deshalb auf false gesetzt
 								//Nun muss die Nachricht erneut versendet werden aber an einen anderen Empfänger.
 							}
-							else break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim zweiten Versuch erfolgreich angekommen ist.
+							else{
+								if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zähler um 1 erhöht
+							break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim zweiten Versuch erfolgreich angekommen ist.
+						
+							}
 						}
-						else break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim ersten Versuch erfolgreich angekommen ist.
-					}
+						else{
+							if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zähler um 1 erhöht
+							break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim ersten Versuch erfolgreich angekommen ist.
+						}
+						}
 					if(abbruch==true) break;
 
 
