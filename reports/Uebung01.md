@@ -1,7 +1,9 @@
 # Übungsblatt 1
 ###### Redundanz
 
-### Aufgabe 2:
+## Aufgabe 2:
+
+##### Testergebnisse:
 
 \# | Input | Wdh. | Fehlerart | Fh.Knoten | Fehler Wahrsch. | Result [%]: | 0 | 1 | 2 | 3 | 4
 -: | :- | :-: | :-: | :-: | :-: || :-: | :-: | :-: | :-: | :-:
@@ -18,4 +20,6 @@
 11 | 4,BCDEF | 208 | Corrupt Content | BCDEF | 0.1 || 0 | 67 | 0 | 0 | 33
 12 | 4,BCDEF | 202 | Fail Silence | BCDEF | 0.1 ||  0 | 62 | 0 | 0 | 38
 
-### Aufgabe 3:
+##### Auswertung:
+
+## Aufgabe 3:
