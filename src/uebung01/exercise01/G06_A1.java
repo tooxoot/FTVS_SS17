@@ -5,6 +5,7 @@ import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
 
 import static SoFTlib.Helper.*;
 import SoFTlib.*;
+import jdk.nashorn.internal.objects.NativeUint16Array;
 import jdk.nashorn.internal.runtime.events.RecompilationEvent;
 
 /**
@@ -40,7 +41,7 @@ class BCDEF extends Node {
 
 			// Calculates the result or terminates
 			if (rxMsg != null) {
-				// say("got A message!");
+				 //say("got A message!");
 				switch (rxMsg.getTy()) {
 				case 'a': // Neue Auftragsnachricht
 					//Calculates the sum of the three integers given in the Message
@@ -201,9 +202,7 @@ class A extends Node {
 		int unerkannteFehler = 0;
 		boolean abbruch = false;
 
-		//Array fï¿½r den aktuellen Zustand der Knoten aus Sicht von A, Anfangs alle Knoten ff
-		//Index 0 gilt fï¿½r Knoten B usw.
-		boolean fehlerhafte_Rechner[]={true,true,true,true,true,};
+		
 
 
 //		double currentTime = time();
@@ -275,20 +274,38 @@ class A extends Node {
 			den nachfolgenden AuftrÃ¤gen, bis alle AuftrÃ¤ge erfolgreich bearbeitet wurden oder aber kein fehlerfreier
 			Rechner mehr verfÃ¼gbar ist. In letzterem Fall soll ein Simulationslauf vorzeitig abgebrochen werden.*/
 			{
-				int j = 0;
+				
+				//recievers enthealt die zu verwendetetn Rechner daraus muss einer ausgewaehlt werden
+				
+				boolean fehlerhafte_Rechner[]={false,false,false,false,false,};
+				for( String receiver : receivers.split("(?!^)") ){
+				fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receiver)]=true;
+				}
+				receivers="B";
+				
+				int j = 0; //Test für 
 				do{
 					//Form message and send it to the current reciever(has to be only 1!)
 					String content = erzeugeInhalt(j + 1);
 					Msg currentMessage = form('a', content);
-
-					//prï¿½fe ob der aktuelle Empfï¿½nger nicht bereits als Fehlerhaft eingestuft ist
-					int Abbruchzaehler=0;
+					//say("Message made", true);
+					
+					
+					
+					//Diese Schleife sorgt dafuer, dass falls ein Knoten fehlerhaft wird dieselbe Nachricht nochmal an einen anderen Knoten gesendet wird
+					
+					for(int k =0;k < 6 ; k++){
+					
+						
+						//pruefe ob der aktuelle Empfaenger nicht bereits als Fehlerhaft eingestuft ist
+						//falls ja suche einen anderen
+						int Abbruchzaehler=0;
 					while(fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]==false){
 						int temp = fehlerhafteRechnerStrtoInt(receivers);
 						int neuerEmpfaenger=(temp+1)%5;
 						receivers=fehlerhafteRechnerInttoStr(neuerEmpfaenger);
 						Abbruchzaehler++;
-						if(Abbruchzaehler > 5){ //Alle Empfï¿½nger sind fehlerhaft
+						if(Abbruchzaehler > 5){ //Alle Empfaenger sind fehlerhaft
 							abbruch=true;
 							break;
 						}
@@ -297,21 +314,33 @@ class A extends Node {
 
 
 						currentMessage.send(receivers); //Nachricht senden
-
-						Msg recievedMessage = receive(receivers, time()+160);
+						say("SEND MESSAGE NR  " + j, true);
+						Msg recievedMessage = receive(receivers, time()+200);
 						//Falls Keine Nachricht ankommt oder wenn der Test negativ ausgewertet wird, wird die Nachricht erneut versendet
 						if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
+							erkannteFehler++;	//Die Nachricht ist nicht angekommen oder wurde von Knoten A als Fehlerhaft eingestuft
 							currentMessage.send(receivers);
-							recievedMessage = receive(receivers, time()+160);
+							say("SEND MESSAGE NR  " + j +" Again", true);
+							recievedMessage = receive(receivers, time()+200);
 							if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
 								fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]=false; //Der Rechner gilt als Fehlerhaft und wird deshalb auf false gesetzt
+								//Nun muss die Nachricht erneut versendet werden aber an einen anderen Empfänger.
+							}
+							else{
+								if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zähler um 1 erhöht
+							break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim zweiten Versuch erfolgreich angekommen ist.
+						
 							}
 						}
+						else{
+							if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zähler um 1 erhöht
+							break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim ersten Versuch erfolgreich angekommen ist.
+						}
+						}
+					if(abbruch==true) break;
 
 
-
-
-				}while(j++ < 10);
+				}while(j++ < 9);
 			}
 			break;
 
@@ -520,6 +549,6 @@ public class G06_A1 extends SoFT {
 
 	public static void main(String[] args) {
 		new G06_A1().runSystem(new Node[] { new A(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF(), new BCDEF() },
-				"G06_A1", "ï¿½bungsblatt 1: Redundanz", "Sven und Justin");
+				"G06_A1", "Uebungsblatt 1: Redundanz", "Sven und Justin");
 	}
 }
