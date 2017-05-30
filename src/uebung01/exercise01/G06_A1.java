@@ -2,6 +2,7 @@ package uebung01.exercise01;
 import java.util.*;
 
 import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
+import com.sun.xml.internal.ws.client.SenderException;
 
 import static SoFTlib.Helper.*;
 import SoFTlib.*;
@@ -124,7 +125,7 @@ class A extends Node {
 		if (werte.length < mindestAnzahl)
 			return -100;
 		else {
-			if(werte.length == 1) return 1;
+			if(werte.length == 1) return werte[0];
 			for (int i = 0; i < werte.length; i++) {
 				int curVal = werte[i];
 				int curCount = 1;
@@ -283,7 +284,7 @@ class A extends Node {
 				}
 				receivers="B";
 				
-				int j = 0; //Test für 
+				int j = 0; //Test fï¿½r 
 				do{
 					//Form message and send it to the current reciever(has to be only 1!)
 					String content = erzeugeInhalt(j + 1);
@@ -324,16 +325,16 @@ class A extends Node {
 							recievedMessage = receive(receivers, time()+200);
 							if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
 								fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]=false; //Der Rechner gilt als Fehlerhaft und wird deshalb auf false gesetzt
-								//Nun muss die Nachricht erneut versendet werden aber an einen anderen Empfänger.
+								//Nun muss die Nachricht erneut versendet werden aber an einen anderen Empfï¿½nger.
 							}
 							else{
-								if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zähler um 1 erhöht
+								if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zï¿½hler um 1 erhï¿½ht
 							break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim zweiten Versuch erfolgreich angekommen ist.
 						
 							}
 						}
 						else{
-							if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zähler um 1 erhöht
+							if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zï¿½hler um 1 erhï¿½ht
 							break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim ersten Versuch erfolgreich angekommen ist.
 						}
 						}
@@ -463,10 +464,10 @@ class A extends Node {
 					ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 	
 					// Maximum time waited to receive all result=messages
-					double maxWaitingPeriod = receiverCount * 2 * 200;
+					double maxWaitingPeriod = receiverCount * 200;
 					double startingTime = time();
 					while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
-						Msg receivedMessage = receive(receivers, time() + 200);
+						Msg receivedMessage = receive(receivers, time() + 50);
 						if(receivedMessage != null) receivedMessages.add( receivedMessage );
 					}
 	
@@ -479,7 +480,7 @@ class A extends Node {
 					for(int k : receivedResults) rrP += " + " + k; 
 	
 					// Check Results and terminate if no majority is found
-					if( !receivers.equals("") && istMehrheitVorhanden( receivedResults, (int)Math.round(receivedMessages.size() / 2.0)) ){
+					if( !(receivers.length() < 2) && istMehrheitVorhanden( receivedResults, (int)Math.round(receivedMessages.size() / 2.0)) ){
 						int majority = bildeMehrheit( receivedResults, (int)Math.round(receivedMessages.size() / 2.0) );
 						say("Majority:" + majority + "  " + (int)Math.round(receivedMessages.size() / 2.0));
 						
@@ -526,6 +527,8 @@ class A extends Node {
 		}
 
 		//form('q', "").send("BCDEF");
+		say("RETURN");
+		form('q', "TERMINATE").send("BCDEF");
 		return abbruch + " " + erkannteFehler + " " + unerkannteFehler;
 	}
 }
