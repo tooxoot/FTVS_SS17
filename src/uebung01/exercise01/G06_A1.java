@@ -407,6 +407,7 @@ class A extends Node {
 								// ... and replaces it with a backup
 								receivers = receivers.replace(corruptReceiver, backupReceiverQueue.poll() );
 								say("new Receivers Content: " + receivers);
+								erkannteFehler++;
 							}
 						
 						// If the number of receivers is bigger than the number of received results, all silent receicers are replaced
@@ -423,6 +424,7 @@ class A extends Node {
 							for( String receiverNotFound : receiversNotFound.split("(?!^)") ){
 								backupReceiverQueue.add(receiverNotFound);
 								receivers = receivers.replace(receiverNotFound, backupReceiverQueue.poll());
+								erkannteFehler++;
 							}
 							say("new Receivers Omit: " + receivers);
 						}
@@ -490,6 +492,7 @@ class A extends Node {
 								// ... and deletes it from the receiver list
 								receivers = receivers.replace(corruptReceiver, "" );
 								say("new Receivers Content: " + receivers);
+								erkannteFehler++;
 							}
 						
 						// If the number of receivers is bigger than the number of received results, all silent receicers are replaced
@@ -505,6 +508,7 @@ class A extends Node {
 							// Replaces the silent receivers.
 							for( String receiverNotFound : receiversNotFound.split("(?!^)") ){
 								receivers = receivers.replace(receiverNotFound, "");
+								erkannteFehler++;
 							}
 							say("new Receivers Omit: " + receivers);
 						}
