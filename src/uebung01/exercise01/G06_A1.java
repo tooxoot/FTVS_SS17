@@ -244,10 +244,10 @@ class A extends Node {
 					ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 
 					// Maximum time waited to receive all result=messages
-					double maxWaitingPeriod = receiverCount * 2 * 200;
+					double maxWaitingPeriod = receiverCount * 200;
 					double startingTime = time();
 					while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
-						Msg receivedMessage = receive(receivers, time() + 200);
+						Msg receivedMessage = receive(receivers, time() + 50);
 						if(receivedMessage != null) receivedMessages.add( receivedMessage );
 					}
 
@@ -378,10 +378,10 @@ class A extends Node {
 					ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 
 					// Maximum time waited to receive all result=messages
-					double maxWaitingPeriod = receiverCount * 2 * 200;
+					double maxWaitingPeriod = receiverCount * 200;
 					double startingTime = time();
 					while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
-						Msg receivedMessage = receive(receivers, time() + 200);
+						Msg receivedMessage = receive(receivers, time() + 50);
 						if(receivedMessage != null) receivedMessages.add( receivedMessage );
 					}
 
@@ -448,7 +448,7 @@ class A extends Node {
 			ein Rechner als fehlerfrei gilt oder aber keine absolute Mehrheit mehr gebildet werden konnte, soll der
 			entsprechende Simulationslauf vorzeitig abgebrochen werden.*/
 			{
-				receivers = "BCDEF";
+//				receivers = "BCDEF";
 				
 				
 				int i = 0;
