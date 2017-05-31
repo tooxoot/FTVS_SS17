@@ -244,7 +244,7 @@ class A extends Node {
 					ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 
 					// Maximum time waited to receive all result=messages
-					double maxWaitingPeriod = receiverCount * 200;
+					double maxWaitingPeriod = receiverCount * 50;
 					double startingTime = time();
 					while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
 						Msg receivedMessage = receive(receivers, time() + 50);
@@ -262,7 +262,12 @@ class A extends Node {
 						say("ABORT");
 						break;
 					}
-					if(!perfekterTest(content, bildeMehrheit(receivedResults, (int)Math.round((receivedMessages.size() / 2.0))))) unerkannteFehler ++;
+					int majority = bildeMehrheit(receivedResults, (int)Math.round((receivedMessages.size() / 2.0)));
+					if(!perfekterTest(content, majority)) unerkannteFehler ++;
+					for (int j : receivedResults) {
+						if(j != majority) erkannteFehler++;
+					}
+					erkannteFehler += receiverCount - receivedResults.length;
 				} while(++i < 10);
 			}
 			break;
