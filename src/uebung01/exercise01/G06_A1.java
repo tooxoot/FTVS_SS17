@@ -262,6 +262,7 @@ class A extends Node {
 						say("ABORT");
 						break;
 					}
+					if(!perfekterTest(content, bildeMehrheit(receivedResults, (int)Math.round((receivedMessages.size() / 2.0))))) unerkannteFehler ++;
 				} while(++i < 10);
 			}
 			break;
@@ -430,6 +431,8 @@ class A extends Node {
 							say("new Receivers Omit: " + receivers);
 						}
 						
+						if(!perfekterTest(content, majority)) unerkannteFehler ++;
+						
 					} else {
 						abbruch = true;
 						say("ABORT");
@@ -513,7 +516,7 @@ class A extends Node {
 							}
 							say("new Receivers Omit: " + receivers);
 						}
-						
+						if(!perfekterTest(content, majority)) unerkannteFehler ++;
 					} else {
 						abbruch = true;
 						say("ABORT");
@@ -550,8 +553,9 @@ public class G06_A1 extends SoFT {
 			r = 3;
 		if (abbruch == true)
 			r = 4;
-
+		if (exec() >= 400) return 5;
 		return r;
+		
 	}
 
 	public static void main(String[] args) {
