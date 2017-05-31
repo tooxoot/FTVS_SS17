@@ -2,6 +2,7 @@ package uebung01.exercise01;
 import java.util.*;
 
 import com.sun.org.apache.bcel.internal.generic.ReturnaddressType;
+import com.sun.xml.internal.ws.client.SenderException;
 
 import static SoFTlib.Helper.*;
 import SoFTlib.*;
@@ -124,7 +125,7 @@ class A extends Node {
 		if (werte.length < mindestAnzahl)
 			return -100;
 		else {
-			if(werte.length == 1) return 1;
+			if(werte.length == 1) return werte[0];
 			for (int i = 0; i < werte.length; i++) {
 				int curVal = werte[i];
 				int curCount = 1;
@@ -243,10 +244,10 @@ class A extends Node {
 					ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 
 					// Maximum time waited to receive all result=messages
-					double maxWaitingPeriod = receiverCount * 2 * 200;
+					double maxWaitingPeriod = receiverCount * 200;
 					double startingTime = time();
 					while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
-						Msg receivedMessage = receive(receivers, time() + 200);
+						Msg receivedMessage = receive(receivers, time() + 50);
 						if(receivedMessage != null) receivedMessages.add( receivedMessage );
 					}
 
@@ -377,10 +378,10 @@ class A extends Node {
 					ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 
 					// Maximum time waited to receive all result=messages
-					double maxWaitingPeriod = receiverCount * 2 * 200;
+					double maxWaitingPeriod = receiverCount * 200;
 					double startingTime = time();
 					while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
-						Msg receivedMessage = receive(receivers, time() + 200);
+						Msg receivedMessage = receive(receivers, time() + 50);
 						if(receivedMessage != null) receivedMessages.add( receivedMessage );
 					}
 
@@ -447,7 +448,7 @@ class A extends Node {
 			ein Rechner als fehlerfrei gilt oder aber keine absolute Mehrheit mehr gebildet werden konnte, soll der
 			entsprechende Simulationslauf vorzeitig abgebrochen werden.*/
 			{
-				receivers = "BCDEF";
+//				receivers = "BCDEF";
 				
 				
 				int i = 0;
@@ -463,10 +464,10 @@ class A extends Node {
 					ArrayList<Msg> receivedMessages = new ArrayList<Msg>();
 	
 					// Maximum time waited to receive all result=messages
-					double maxWaitingPeriod = receiverCount * 2 * 200;
+					double maxWaitingPeriod = receiverCount * 200;
 					double startingTime = time();
 					while(time() < startingTime + maxWaitingPeriod && receivedMessages.size() < receiverCount){
-						Msg receivedMessage = receive(receivers, time() + 200);
+						Msg receivedMessage = receive(receivers, time() + 50);
 						if(receivedMessage != null) receivedMessages.add( receivedMessage );
 					}
 	
@@ -479,7 +480,7 @@ class A extends Node {
 					for(int k : receivedResults) rrP += " + " + k; 
 	
 					// Check Results and terminate if no majority is found
-					if( !receivers.equals("") && istMehrheitVorhanden( receivedResults, (int)Math.round(receivedMessages.size() / 2.0)) ){
+					if( !(receivers.length() < 2) && istMehrheitVorhanden( receivedResults, (int)Math.round(receivedMessages.size() / 2.0)) ){
 						int majority = bildeMehrheit( receivedResults, (int)Math.round(receivedMessages.size() / 2.0) );
 						say("Majority:" + majority + "  " + (int)Math.round(receivedMessages.size() / 2.0));
 						
@@ -525,7 +526,9 @@ class A extends Node {
 			break;
 		}
 
-		form('q', "").send("BCDEF");
+		//form('q', "").send("BCDEF");
+		say("RETURN");
+		form('q', "TERMINATE").send("BCDEF");
 		return abbruch + " " + erkannteFehler + " " + unerkannteFehler;
 	}
 }
