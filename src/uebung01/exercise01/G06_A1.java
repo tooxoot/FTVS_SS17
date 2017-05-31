@@ -262,6 +262,7 @@ class A extends Node {
 						say("ABORT");
 						break;
 					}
+					if(!perfekterTest(content, bildeMehrheit(receivedResults, (int)Math.round((receivedMessages.size() / 2.0))))) unerkannteFehler ++;
 				} while(++i < 10);
 			}
 			break;
@@ -284,7 +285,7 @@ class A extends Node {
 				}
 				receivers="B";
 				
-				int j = 0; //Test für 
+				int j = 0; //Test fï¿½r 
 				do{
 					//Form message and send it to the current reciever(has to be only 1!)
 					String content = erzeugeInhalt(j + 1);
@@ -325,16 +326,16 @@ class A extends Node {
 							recievedMessage = receive(receivers, time()+200);
 							if(recievedMessage==null || ! schlechterAbsoluttest(content,number(recievedMessage.getCo())) ){
 								fehlerhafte_Rechner[fehlerhafteRechnerStrtoInt(receivers)]=false; //Der Rechner gilt als Fehlerhaft und wird deshalb auf false gesetzt
-								//Nun muss die Nachricht erneut versendet werden aber an einen anderen Empfänger.
+								//Nun muss die Nachricht erneut versendet werden aber an einen anderen Empfï¿½nger.
 							}
 							else{
-								if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zähler um 1 erhöht
+								if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zï¿½hler um 1 erhï¿½ht
 							break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim zweiten Versuch erfolgreich angekommen ist.
 						
 							}
 						}
 						else{
-							if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zähler um 1 erhöht
+							if (! perfekterTest(content, number(recievedMessage.getCo()))) unerkannteFehler++; //falls der perfekte Test einen Fehler entdeckt, wird der Zï¿½hler um 1 erhï¿½ht
 							break; //die Schleife wird abgeborchen, da eine korrekte Nachricht beim ersten Versuch erfolgreich angekommen ist.
 						}
 						}
@@ -430,6 +431,8 @@ class A extends Node {
 							say("new Receivers Omit: " + receivers);
 						}
 						
+						if(!perfekterTest(content, majority)) unerkannteFehler ++;
+						
 					} else {
 						abbruch = true;
 						say("ABORT");
@@ -513,7 +516,7 @@ class A extends Node {
 							}
 							say("new Receivers Omit: " + receivers);
 						}
-						
+						if(!perfekterTest(content, majority)) unerkannteFehler ++;
 					} else {
 						abbruch = true;
 						say("ABORT");
