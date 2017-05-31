@@ -27,34 +27,69 @@
 
 
 #### Welche Redundanztechniken kommen in den einzelnen Betriebsarten zum Einsazt?
+<br>
+Modus 1:
+- Hier wird eine statische strukturelle Redundanztechnik verwendet. Es werden während des gesamten Einsatzzeitraumes die Redundanten Mittel aktiv verwendet.
+Es handelt sich hierbei im ein n-von-m-System, da bei erhalt der Nachrichten der aktiven Knoten geprüft wird welche Nachricht am häufigsten angekommen ist und diese wird als richtig eingestuft.
 
-Modus 1: Hier wird eine statische strukturelle Redundanztechnik verwendet. Es werden während des gesamten Einsatzzeitraumes die Redundanten Mittel aktiv verwendet.
-			Es handelt sich hierbei im ein n-von-m-System, da bei erhalt der Nachrichten der aktiven Knoten geprüft wird welche Nachricht am häufigsten angekommen ist und diese wird als richtig eingestuft.
+<br>
+Modus 2:
+- Bei Modus 2 werden mehrere dynamische Redundanztechniken verwendet.
+	Im Fehlerfall wird zuerst dynamisch funktionelle Redundanz angewendet, weil die Nachricht erneut an den gleichen Rechner gesendet wird.
+	Falls diese Nachricht ebenfalls nicht vom Empfänger korrekt
+	verarbeitet werden kann greift die dynamisch strukturelle Redundanz. Es wird von dem primären Rechner auf einen im Input eingegeben Ersatzrechner umgeschaltet, falls dieser noch ff ist.
 
-Modus 2:	Bei Modus 2 werden mehrere dynamische Redundanztechniken verwendet.
-			Im Fehlerfall wird zuerst dynamisch funktionelle Redundanz angewendet, weil die Nachricht erneut an den gleichen Rechner gesendet wird.
-			Falls diese Nachricht ebenfalls nicht vom Empfänger korrekt verarbeitet werden kann greift die dynamisch strukturelle Redundanz. Es wird von dem primären Rechner auf einen im Input eingegeben Ersatzrechner umgeschaltet, falls dieser noch ff ist.
+<br>
+Modus 3:
+- Hier wurde eine strukturelle Hybridredundanz implementiert, da zu den redundant genutzten Primärrechnern Ersatzrechner vorliegen, die im Fehlerfall integriert werden.
 
-Modus 3:	Hier wurde eine strukturelle Hybridredundanz implementiert, da zu den redundant genutzten Primärrechnern Ersatzrechner vorliegen, die im Fehlerfall integriert werden.
+<br>
+Modus 4:
+- Selbstreinigende Redundanz, da aus den Ausgangsrechnern fehlerhafte Rechner ausgeschlossen werden.
 
-Modus 4:	Selbstreinigende Redundanz, da aus den Ausgangsrechnern fehlerhafte Rechner ausgeschlossen werden.
+
+<br>
+<br>
 
 #### Welcher weiteren Vor- und Nachteile  haben die einzelnen Redundanztechniken, die nicht unmittelbar aus den Simulationsergebnissen ersichtlich sind?
+<br>
+Modus 1:
+- Problematisch bei statischer struktureller Redundanz ist, dass bspw. Alle Rechner dasselbe falsche Ergebnis liefern können, welches aufgrund der Mehrheitsentscheidung als richtig eingestuft wird.
 
-Modus 1:	Problematisch bei statischer struktureller Redundanz ist, dass bspw. Alle Rechner dasselbe falsche Ergebnis liefern können, welches aufgrund der Mehrheitsentscheidung als richtig eingestuft wird.
+<br>
+Modus 2:
+-	 Vorteil bei Modus 2 ist, dass selbst mit nur einem ff Rechner die volle Funktionalität zur Verfügung steht und selbst mit diesem einen Rechner gewisse Fehler toleriert werden, da bei einem einmaligen Fehler eine Sendewiederholung erfolgt.
 
-Modus 2:	 
 
+- Nachteilig ist hierbei, dass für jeden erkannten Fehler erneut gesendet werden muss -  was natürlich Zeit kostet.
+
+<br>
 Modus 3:
+- Der Nachteil von Modus 3 ist identisch zu dem in Modus 1 wobei er hier noch gravierender ist, da dann die ff Rechner ausgegliedert und durch andere Rechner ersetzt werden.
 
+
+- Vorteilhaft ist allerdings, dass kein Zeitverlust erlitten wird falls es zu fehlerhaften Ergebnisen kommt.
+
+<br>
 Modus 4:
+- Der Nachteil von Modus 4 ist identisch zu dem in Modus 1 & 3 wobei er hier noch gravierender ist, da dann die ff Rechner ausgegliedert werden und nur mit fh Rechner weitergearbeitet wird.
+
+<br>
+<br>
 
 #### Gibt es Betriebsarten, die unter eingescchränkten Fehlerannahmen alle Fehler tolerieren und wenn ja, welche und unter welchen Fehlerannahmen?
+<br>
+Modus 1:  
+- Unter der Annahme, dass nicht mehr als 2 Rechner fh werden, können bei einer Eingabe von min. 5 Rechnern alle Fehlerarten mit Auftrittswahrscheinlichekeiten bis zu 100% toleriert.
 
-Modus 1: Unter der Annahme, dass nicht mehr als 2 Rechner fh werden, können bei einer Eingabe von min. 5 Rechnern alle Fehlerarten mit Auftrittswahrscheinlichekeiten bis zu 100% toleriert.
+<br>
+Modus 2:
+- Unter der Annahme, dass nicht mehr als 4 Rechner fh werden, können die Fehler fail silence und fail omission zu 100% toleriert werden. Corrupt Content kann aufgrund des schlechten Absoluttests nicht immer toleriert werden. Falls dieser immer richtig liegen würde, könnte auch dieser Fehler zu 100% toleriert werden.
 
-Modus 2: Unter der Annahme, dass nicht mehr als 4 Rechner fh werden, können die Fehler fail silence und fail omission zu 100% toleriert werden. Corrupt Content kann aufgrund des schlechten Absoluttests nicht immer toleriert werden. Falls dieser immer richtig liegen würde, könnte auch dieser Fehler zu 100% toleriert werden.
+<br>
+Modus 3:
+- Unter der Annahme, dass nicht mehr als 2 Rechner fh werden und zu Beginn eine absolute Mehrheit an ff Rechnern vorhanden ist, können alle Fehler zu 100% toleriert werden.
 
-Modus 3: Unter der Annahme, dass nicht mehr als 2 Rechner fh werden und zu Beginn eine absolute Mehrheit an ff Rechnern vorhanden ist, können alle Fehler zu 100% toleriert werden.
-
-Modus 4: Unter der Annahme, dass nicht mehr als 3 Rechner fh werden und diese nicht zum gleichen Zeitpunkt fh werden, können in dieser Betriebsart alle Fehlertypen toleriert werden.
+<br>
+Modus 4:
+- Unter der Annahme, dass nicht mehr als 3 Rechner fh werden und diese nicht zum gleichen Zeitpunkt fh werden, können in dieser Betriebsart alle Fehlertypen toleriert werden.
