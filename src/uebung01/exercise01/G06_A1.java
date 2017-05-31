@@ -525,7 +525,7 @@ class A extends Node {
 			break;
 		}
 
-		//form('q', "").send("BCDEF");
+		form('q', "").send("BCDEF");
 		return abbruch + " " + erkannteFehler + " " + unerkannteFehler;
 	}
 }
@@ -547,8 +547,9 @@ public class G06_A1 extends SoFT {
 			r = 3;
 		if (abbruch == true)
 			r = 4;
-
+		if (exec() >= 400) return 5;
 		return r;
+		
 	}
 
 	public static void main(String[] args) {
