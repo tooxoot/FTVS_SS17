@@ -8,9 +8,9 @@
 
 | # | Input | Wdh. | Fehlerart | Fh.Knoten | Fehler Wahrsch. | Result [%]: | 0 | 1 | 2 | 3 | 4 |
 | -: | :- | :-: | :-: | :-: | :-: | -: | :-: | :-: | :-: | :-: | :-: |
-| 01 | 1,BCD | 400 | Corrupt Content | BCDEF | 0.1 |  | 78 | 0 | 0 | 10 | 12 |
-| 02 | 1,BCDEF | 400 | Corrupt Content | BCDEF | 0.1 |  | 89 | 0 | 0 | 4 | 7 |
-| 03 | 1,BCDEF | 290 | Fail Silence | BCDEF | 0.1 |  | 92 | 0 | 0 | 0 | 8 |
+| 01 | 1,BCD | 400 | Corrupt Content | BCDEF | 0.1 |  | 3 | 69 | 13 | 0 | 15 |
+| 02 | 1,BCDEF | 400 | Corrupt Content | BCDEF | 0.1 |  | 1 | 92 | 2 | 0 | 5 |
+| 03 | 1,BCDEF | 200 | Fail Silence | BCDEF | 0.1 |  | 1 | 92 | 0 | 0 | 7 |
 | 04 | 2,BCD | 283 | Fail Silence | BCDEF | 0.1 |  | 36 | 53 | 0 | 0 | 11 |
 | 05 | 2,BCDEF | 209 | Fail Silence | BCDEF | 0.1 |  | 34 | 65 | 0 | 0 | 1 |
 | 06 | 2,BCDEF | 213 | Fail Omission | BCDEF | 0.1 |  | 100 | 0 | 0 | 0 | 0 |
