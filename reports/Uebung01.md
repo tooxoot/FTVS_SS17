@@ -23,6 +23,11 @@
 
 ##### Auswertung:
 
+Auffällig ist vor allem die hundert prozentige Fehlerfreiheit von Test Nr. 6. Offenbar sind hier Nachrichtenausfälle nie direkt aufeinander folgend aufgetreten.
+
+Außerdem ist auffällig, dass Ergebnis 3 in fast allen Tests ausbleibt. Dies ist allerdings mit der geringen Wahrscheinlichkeit zu erklären, dass nur unerkannte Fehler auftreten.
+
+
 ## Aufgabe 3:
 
 
@@ -65,6 +70,7 @@ Falls diese Nachricht ebenfalls nicht vom Empfänger korrekt verarbeitet werden 
   Vorteilhaft ist allerdings, dass kein Zeitverlust erlitten wird falls es zu fehlerhaften Ergebnisen kommt.
 
 - Modus 4
+
   Der Nachteil von Modus 4 ist identisch zu dem in Modus 1 & 3 wobei er hier noch gravierender ist, da dann die ff Rechner ausgegliedert werden und nur mit fh Rechner weitergearbeitet wird.
 
 
