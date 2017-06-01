@@ -54,8 +54,9 @@ Falls diese Nachricht ebenfalls nicht vom Empfänger korrekt verarbeitet werden 
 
 #### Welcher weiteren Vor- und Nachteile  haben die einzelnen Redundanztechniken, die nicht unmittelbar aus den Simulationsergebnissen ersichtlich sind?
 
-Modus 1:
-- Problematisch bei statischer struktureller Redundanz ist, dass bspw. Alle Rechner dasselbe falsche Ergebnis liefern können, welches aufgrund der Mehrheitsentscheidung als richtig eingestuft wird.
+- Modus 1
+
+  Problematisch bei statischer struktureller Redundanz ist, dass bspw. Alle Rechner dasselbe falsche Ergebnis liefern können, welches aufgrund der Mehrheitsentscheidung als richtig eingestuft wird.
 
 - Modus 1
 
@@ -76,6 +77,8 @@ Modus 1:
 - Modus 4
 
   Der Nachteil von Modus 4 ist identisch zu dem in Modus 1 & 3 wobei er hier noch gravierender ist, da dann die ff Rechner ausgegliedert werden und nur mit fh Rechner weitergearbeitet wird.
+  
+#### Gibt es Betriebsarten, die unter eingescchränkten Fehlerannahmen alle Fehler tolerieren und wenn ja, welche und unter welchen Fehlerannahmen?
 
 - Modus 1
 
