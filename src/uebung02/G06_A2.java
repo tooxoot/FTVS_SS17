@@ -1,5 +1,10 @@
 package uebung02;
 import static SoFTlib.Helper.*;
+
+import java.util.Arrays;
+
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import SoFTlib.*;
 class Rechenprozess extends Node {
 
@@ -95,7 +100,40 @@ class Rechenprozess extends Node {
 			ist sie oftmals groeﬂer als 80.
 		 * 
 		 */
-		return null;
+		int[] a={10, 10, 10, 10, 10, 10, 10, 10}; //starting values for a
+		int[] resulta={90, 46, 19, 13, 46, 23, 12, 16}; //result   values for a
+		int s =0;	//counter for operations
+		while(!Arrays.equals(a, resulta)){
+			//increasing counter by one
+			s++; 
+			//using the method "schritt" to perform progress
+			boolean[] tempBoolenanArray= schritt(a); //
+				
+			//creating message for C & B
+			String b = null;
+			String a_String="";
+			for(int i=0; i<=7;i++){
+				a_String+= a[i]+" "; 					//message to B has to be separated with spaces
+				if(tempBoolenanArray[i] == true){
+					if(b == null){b= i + " " + a[i];} 	//no comma in first place
+					else{b+= ", " + i + " " + a[i];} 	//need comma here
+				}
+			}
+			//messages done, now send to C to create RP
+			form('z', b).send('C');
+			//send to B for testing
+			form('e', a_String ).send('B');
+			
+			//recieve message from either B or C and use the results for next iteration
+			Msg recived_msg = receive("BC", 'z', 50);
+			//overwriting values from a with recieved array
+			/* TODO insert this line for full functionality of A
+			 	for (int i = 0; i <= 7; i++) {	a[i] = number(word(recived_msg.getCo() ,i ,1));	}
+			*/
+			
+			
+		}
+		return s + " Rechenschritte durchgefuehrt" ;
 	}
 
 }
