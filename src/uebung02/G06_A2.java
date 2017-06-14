@@ -2,6 +2,8 @@ package uebung02;
 import static SoFTlib.Helper.*;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
+
 import SoFTlib.*;
 class Rechenprozess extends Node {
 
@@ -303,7 +305,20 @@ class Ruecksetzpunktverwalter extends Node {
 			//received a message from B 
 			else if(receive_temp.getTy()=='f' && receive_temp.getSe()=='B'){
 				errorcount++;
+				int[] RP_send =RPdefault;
+				String RP_send_str="";
+				while(IntStream.of(RP_send).anyMatch(x -> x== -1)){
+					for(int i=0; i<=7;i++){	 
+						if(RP_send[i] < RP[RP_count][i]){
+							RP_send[i]= RP[RP_count][i];
+					}
+					RP_count--;
+					}
+				}
 				
+				
+				for(int i=0; i<=7;i++){RP_send_str+= RP_send[i]+" "; }
+				form('z', RP_send_str).send('A');
 				//send RP to A
 				
 			}
