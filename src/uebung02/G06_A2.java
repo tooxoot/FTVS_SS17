@@ -2,9 +2,6 @@ package uebung02;
 import static SoFTlib.Helper.*;
 
 import java.util.Arrays;
-
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import SoFTlib.*;
 class Rechenprozess extends Node {
 
