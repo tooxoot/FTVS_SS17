@@ -129,8 +129,8 @@ class Rechenprozess extends Node {
 			//overwriting values from a with recieved array
 			/* TODO insert this line for full functionality of A
 			 */
-			 	for (int i = 0; i <= 7; i++) {	a[i] = number(recived_msg.getCo() ,i+1);	}//fixed the "word" method, because the recived message is only separated by spaces and not by commas
-			//
+			 	for (int i = 0; i <= 7; i++) {	a[i] = number(recived_msg.getCo() ,i+1);	}	//fixed the "word" method, because the recived message is only separated by spaces and not by commas
+			//																					//and the number and word method start with index 1
 			
 			
 		}
@@ -182,11 +182,7 @@ class Absoluttest extends Node {
 	}
 
 	public String runNode(String input) throws SoFTException {
-		/*
-		 * TODO Absoluttest Implementieren!
-		 *
-		 * 
-		 * 	Empfaengt Nachricht von A und preuft dies mit der Methode absoluttest:	
+		/* 	Empfaengt Nachricht von A und preuft dies mit der Methode absoluttest:	
 		  	Nach Ausführung eines Rechenschritts sendet Knoten A eine Ergebnis-Nachricht (Typ ’e’), die alle
 			8 Elemente des Vektors a enthält (durch Leerzeichen getrennt) an den Absoluttest B, der diese auf
 			Korrektheit prüft. Dazu wird die Methode
@@ -218,7 +214,7 @@ class Absoluttest extends Node {
 		while(receivedmsg!= null){
 			
 			//creating int[] 
-			for(int i=0; i<=7;i++){	 a[i]= number(receivedmsg.getCo(),i+1);System.out.println(number(receivedmsg.getCo(),i+1));} 				
+			for(int i=0; i<=7;i++){	 a[i]= number(receivedmsg.getCo(),i+1);} 				
 			
 			//using the "fortschritt" method to simulate progress that was made
 			f=fortschritt(f, a);
