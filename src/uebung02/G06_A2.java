@@ -123,6 +123,7 @@ class Rechenprozess extends Node {
 			
 			//recieve message from either B or C and use the results for next iteration
 			Msg recived_msg = receive("BC", 'z', time()+50);
+			if (recived_msg==null) break;
 			//overwriting values from a with recieved array
 			/* TODO insert this line for full functionality of A
 			 */
@@ -271,7 +272,52 @@ class Ruecksetzpunktverwalter extends Node {
 			return anzZurueck + " mal zurueckgesetzt.";
 			wobei anzZurueck die Anzahl der durchgeführten Rücksetzoperationen ist.
 		 */
-		return null;
+		
+		int[][] RP =new int [50][8];
+		int RP_count=0;
+		int[] RPdefault={-1,-1,-1,-1,-1,-1,-1,-1};
+		
+		RP[0][0]=10;RP[0][1]=10;RP[0][2]=10;RP[0][3]=10;RP[0][4]=10;RP[0][5]=10;RP[0][6]=10;RP[0][7]=10;
+		int errorcount=0;
+		
+		Msg receivedRP = receive('A', 'z', 100);
+		while(receivedRP!= null){
+			RP_count++;
+			if(RP_count>=50){
+				//setting RP_count on 49 so we can use the same method for inserting all of the messages
+				RP_count=49;
+				//if RP is full delete oldest item (RP[1]) and move all other items of the array one position up
+				for(int i=1;i<=48;i++){	RP[i]=RP[i+1];	}
+			}
+			//setting all of the current RP to -1
+			RP[RP_count]=RPdefault;
+			//changing the -1 to the values that were sent from A
+			for(int i=0; i< getItemCount(receivedRP.getCo());i++){	 
+				RP[RP_count][number(receivedRP.getCo(), i+1, 1)]= number(receivedRP.getCo(),i+1,2);
+			}
+			
+			Msg receive_temp = receive("AB", time()+100);
+			//no message received... abort!
+			if(receive_temp==null){break;}
+			
+			//received a message from B 
+			else if(receive_temp.getTy()=='f' && receive_temp.getSe()=='B'){
+				errorcount++;
+				
+				//send RP to A
+				
+			}
+			
+			//received a RP from A
+			else if (receive_temp.getTy()=='z' && receive_temp.getSe()=='A') {
+				receivedRP=receive_temp;
+			}
+			
+			
+		}
+			
+		
+		return errorcount+ " mal zurueckgesetzt";
 	}
 }
 
