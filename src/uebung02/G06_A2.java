@@ -125,11 +125,12 @@ class Rechenprozess extends Node {
 			form('e', a_String ).send('B');
 			
 			//recieve message from either B or C and use the results for next iteration
-			Msg recived_msg = receive("BC", 'z', 50);
+			Msg recived_msg = receive("BC", 'z', time()+50);
 			//overwriting values from a with recieved array
 			/* TODO insert this line for full functionality of A
-			 	for (int i = 0; i <= 7; i++) {	a[i] = number(word(recived_msg.getCo() ,i ,1));	}
-			*/
+			 */
+			 	for (int i = 0; i <= 7; i++) {	a[i] = number(recived_msg.getCo() ,i+1);	}//fixed the "word" method, because the recived message is only separated by spaces and not by commas
+			//
 			
 			
 		}
@@ -209,11 +210,29 @@ class Absoluttest extends Node {
 			B terminiert mit
 			return f + " wurde erreicht.";
 			wobei f der letzte Wert der Fortschrittsvariablen f ist.
-		 
-		 
-		 
 		 */
-		return null;
+		
+		int f=0;
+		int[] a= {0,0,0,0,0,0,0,0};
+		 Msg receivedmsg =receive('A', 'e', 100);
+		while(receivedmsg!= null){
+			
+			//creating int[] 
+			for(int i=0; i<=7;i++){	 a[i]= number(receivedmsg.getCo(),i+1);System.out.println(number(receivedmsg.getCo(),i+1));} 				
+			
+			//using the "fortschritt" method to simulate progress that was made
+			f=fortschritt(f, a);
+			
+			//using the "absoluttest" method to check the recieved message and send Message back to A 
+			if(absoluttest(a)==true){form('z', receivedmsg.getCo()).send('A');}
+			
+			//if recieced message is incorrecct send message to C
+			else{ form('f', f + " + Fehlermeldung").send('C'); }
+			
+			
+			receivedmsg = receive('A', 'e', time()+100);
+		}
+		return f + " wurde erreicht";
 	}
 }
 
