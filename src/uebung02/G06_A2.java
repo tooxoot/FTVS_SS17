@@ -10,13 +10,13 @@ class Rechenprozess extends Node {
 	/**
 	 * Simuliert einen Rechenschritt durch Manipulation des Parameters a und einer kurzen Wartezeit. Die Methode arbeitet vollkommen
 	 * deterministisch. Die Implementierung dieser Methode MUSS NICHT nachvollzogen werden.
-	 * 
+	 *
 	 * @param a
 	 *            Inhalt des Arrays a vor Ausfuehrung des Rechenschritts
 	 * @return Boolsches Array welches impliziert, welche Werte des Arrays a nach Ausfuehrung des Rechenschritts veraendert wurden
 	 * @throws SoFTException
 	 */
-	
+
 	/*Sie veraendert bei jedem Aufruf das Array a scheinbar zufaellig,
 	aber deterministisch. Der erste Eintrag des Arrays a[0] kann als eine Art Befehlszeiger aufgefasst
 	werden, der bei jedem fehlerfreien Rechenschritt um 1 erhoeht wird. Weiterhin simuliert schritt auch
@@ -26,7 +26,7 @@ class Rechenprozess extends Node {
 	8 Elemente des Vektors a enthaelt (durch Leerzeichen getrennt) an den Absoluttest B, der diese auf
 	Korrektheit prueft.
 	*/
-	
+
 	boolean[] schritt(int[] a) throws SoFTException {
 		boolean[] b = { true, false, false, false, false, false, false, false };
 		int[] k = { Math.max(0, (10000 * (a[0] % 99) + 100 * (a[1] % 99) + (a[4] % 99)) % 7),
@@ -73,8 +73,8 @@ class Rechenprozess extends Node {
 	public String runNode(String input) throws SoFTException {
 		/*
 		 * TODO Rechenprozess Implementieren
-		 * 
-		 * 
+		 *
+		 *
 		 *1.Ruecksetzpunkte erstellen und Nachricht senden:
 			Ruecksetzpunkte werden gemae� dem Verfahren �unvollstaendige Zustandsaufzeichnung� dadurch erstellt,
 			dass Knoten A nach jedem Rechenschritt die Elemente des Arrays a, die sich veraendert haben, in einer
@@ -83,31 +83,31 @@ class Rechenprozess extends Node {
 			B sendet. In der Ruecksetzpunkt-Nachricht wird eine kommaseparierte Liste verwendet, wobei jedes
 			Element aus dem Index der veraenderten Zahl und der veraenderten Zahl selbst besteht, welche wiederum
 			durch Leerzeichen getrennt werden.
-		 
+
 		 *2.Empfangen von Nachrichten:
 		 	Bekommt Werte zugesand und fuehrt mit diesen Werten dann den naechsten Rechenschritt aus. Insgesamt fuehrt Knoten
 			A stets genau 80 Rechenschritte auf diese Weise aus. Insbesondere laeuft a[0] dabei von 10 bis 90.
 		 	Anmerkung: Letztlich uebernimmt Knoten A vor jedem Rechenschritt die 8
 			Zahlen fuer das Array a aus der eintreffenden Nachricht, gleichgueltig ob diese von Knoten B oder Knoten
 			C kommt.
-		 
+
 		 *3.Terminieren:
 		 	Knoten A fuehrt so lange Rechenschritte aus, bis ihm nach 80 Rechenschritten die Endwerte {90, 46,
 			19, 13, 46, 23, 12, 16} des Arrays a zugesandt werden. Danach terminiert A mit
 			return s + " Rechenschritte durchgefuehrt.";
 			wobei s die Anzahl der tatsaechlich durchgefuehrten Rechenschritte ist. Bedingt durch das Zuruecksetzen
 			ist sie oftmals groe�er als 80.
-		 * 
+		 *
 		 */
 		int[] a={10, 10, 10, 10, 10, 10, 10, 10}; //starting values for a
 		int[] resulta={90, 46, 19, 13, 46, 23, 12, 16}; //result   values for a
 		int s =0;	//counter for operations
 		while(!Arrays.equals(a, resulta)){
 			//increasing counter by one
-			s++; 
+			s++;
 			//using the method "schritt" to perform progress
 			boolean[] tempBoolenanArray= schritt(a); //
-				
+
 			//creating message for C & B
 			String b = null;
 			String a_String="";
@@ -122,7 +122,7 @@ class Rechenprozess extends Node {
 			form('z', b).send('C');
 			//send to B for testing
 			form('e', a_String ).send('B');
-			
+
 			//recieve message from either B or C and use the results for next iteration
 			Msg recived_msg = receive("BC", 'z', time()+50);
 			if (recived_msg==null) break;
@@ -131,8 +131,8 @@ class Rechenprozess extends Node {
 			 */
 			 	for (int i = 0; i <= 7; i++) {	a[i] = number(recived_msg.getCo() ,i+1);	}	//fixed the "word" method, because the recived message is only separated by spaces and not by commas
 			//																					//and the number and word method start with index 1
-			
-			
+
+
 		}
 		return s + " Rechenschritte durchgefuehrt" ;
 	}
@@ -144,7 +144,7 @@ class Absoluttest extends Node {
 	/**
 	 * Gibt den wahren Fortschritt an, der sich aus dem Inhalt des Arrays a ergibt. Der zuvor erreichte Fortschritt (f_alt) wird nicht
 	 * unterschritten
-	 * 
+	 *
 	 * @param f_alt
 	 *            der zuvor erreichte Fortschritt.
 	 * @param a
@@ -164,7 +164,7 @@ class Absoluttest extends Node {
 	/**
 	 * Fuehrt einen Absoluttest zur Feststellung der Korrektheit der Werte von a durch mit einer nur begrenzten Fehlererfassung. Manche
 	 * Fehler werden nicht sofort sondern eventuell erst einige Rechenschritte spaeter erkannt.
-	 * 
+	 *
 	 * @param a
 	 *            Zu ueberpruefendes int-Array
 	 * @return Ergebnis des Absoluttests
@@ -182,7 +182,7 @@ class Absoluttest extends Node {
 	}
 
 	public String runNode(String input) throws SoFTException {
-		/* 	Empfaengt Nachricht von A und preuft dies mit der Methode absoluttest:	
+		/* 	Empfaengt Nachricht von A und preuft dies mit der Methode absoluttest:
 		  	Nach Ausf�hrung eines Rechenschritts sendet Knoten A eine Ergebnis-Nachricht (Typ �e�), die alle
 			8 Elemente des Vektors a enth�lt (durch Leerzeichen getrennt) an den Absoluttest B, der diese auf
 			Korrektheit pr�ft. Dazu wird die Methode
@@ -190,7 +190,7 @@ class Absoluttest extends Node {
 			benutzt, die ebenfalls im Programmger�st bereitgestellt wird. Bei bestandenem Absoluttest (R�ckgabewert
 			true) sendet Knoten B alle 8 Elemente des Vektors a an den Knoten A zur�ck (Nachrichtentyp
 			�z�).
-		 
+
 		 *	In Knoten B soll weiterhin eine int-Variable f vereinbart werden, die den erreichten Fortschritt angibt.
 			Dazu wird unmittelbar vor jedem Absoluttest
 			f = fortschritt(f, a);
@@ -200,32 +200,32 @@ class Absoluttest extends Node {
 			Wenn der Absoluttest einen Fehler erkennt, sendet er keine Nachricht an A, sondern eine Fehlermeldung
 			(Nachrichtentyp �f�) an den R�cksetzpunktverwalter C mit dem Inhalt "<f> + Fehlermeldung", wobei
 			<f> der Wert der Fortschrittsvariablen ist.
-		 
+
 		 * 	Die Knoten B und C verwenden f�r ihre Empfangsoperationen eine
 			Zeitschranke, so dass sie ebenfalls terminieren, wenn sie von A keine Nachricht mehr erhalten. Knoten
 			B terminiert mit
 			return f + " wurde erreicht.";
 			wobei f der letzte Wert der Fortschrittsvariablen f ist.
 		 */
-		
+
 		int f=0;
 		int[] a= {0,0,0,0,0,0,0,0};
 		 Msg receivedmsg =receive('A', 'e', 100);
 		while(receivedmsg!= null){
-			
-			//creating int[] 
-			for(int i=0; i<=7;i++){	 a[i]= number(receivedmsg.getCo(),i+1);} 				
-			
+
+			//creating int[]
+			for(int i=0; i<=7;i++){	 a[i]= number(receivedmsg.getCo(),i+1);}
+
 			//using the "fortschritt" method to simulate progress that was made
 			f=fortschritt(f, a);
-			
-			//using the "absoluttest" method to check the recieved message and send Message back to A 
+
+			//using the "absoluttest" method to check the recieved message and send Message back to A
 			if(absoluttest(a)==true){form('z', receivedmsg.getCo()).send('A');}
-			
+
 			//if recieced message is incorrecct send message to C
 			else{ form('f', f + " + Fehlermeldung").send('C'); }
-			
-			
+
+
 			receivedmsg = receive('A', 'e', time()+100);
 			say("f = "+f);
 		}
@@ -238,18 +238,18 @@ class Ruecksetzpunktverwalter extends Node {
 	public String runNode(String input) throws SoFTException {
 		/*
 		 * TODO Ruecksetzpunktverwalter implementieren!
-		 * 
-		 * 
+		 *
+		 *
 		 * Es wird eine Fehlermeldung (Nachrichtentyp �f�)  von dem  R�cksetzpunktverwalter C mit dem Inhalt "<f> + Fehlermeldung" empfangen, wobei
 			<f> der Wert der Fortschrittsvariablen ist. Als Antwort darauf sendet der R�cksetzpunktverwalter an
 			den Knoten A einen vollst�ndigen R�cksetzpunkt, bestehend aus 8 Zahlen (Nachrichtentyp �z�), die A in
 			das Array a �bernimmt.
-			
+
 			R�cksetzpunkte werden gem�� dem Verfahren �unvollst�ndige Zustandsaufzeichnung� dadurch erstellt,
 			dass Knoten A nach jedem Rechenschritt die Elemente des Arrays a, die sich ver�ndert haben, in einer
 			R�cksetzpunkt-Nachricht (Nachrichtentyp �z� ohne Fehlerinjektion) an den R�cksetzpunktverwalter C
 			sendet
-			
+
 			Knoten C speichert die ihm zugesandten (meist unvollst�ndigen) R�cksetzpunkte in einem zweidimensionalen
 			Array RP. Der erste Index von RP bezeichnet den (meist unvollst�ndigen) R�cksetzpunkt,
 			wobei �ltere R�cksetzpunkt einen kleineren Index aufweisen. Insgesamt werden bis zu 50 (meist unvollst�ndige)
@@ -260,13 +260,13 @@ class Ruecksetzpunktverwalter extends Node {
 			R�cksetzpunkte RP[x][...] r�cken dann um eine Position nach vorn. Der �lteste R�cksetzpunkt RP
 			[0][...] enth�lt die Anfangsbelegung {10, 10, 10, 10, 10, 10, 10, 10} von a und wird niemals
 			gel�scht.
-			
+
 			Wenn der Absoluttest durch eine Fehlermeldung (Nachrichtentyp �f�) eine R�ckw�rtsbehebung verlangt,
 			dann soll aus den unvollst�ndigen R�cksetzpunkten ein vollst�ndiger zusammengesetzt werden. Au�erdem
 			ist die R�cksetzweite in geeigneter Weise zu bestimmen. Dazu soll der mit der Fehlermeldung �bermittelte
 			Fortschritt ausgewertet werden.
-			
-			
+
+
 			Die Knoten B und C verwenden f�r ihre Empfangsoperationen eine
 			Zeitschranke, so dass sie ebenfalls terminieren, wenn sie von A keine Nachricht mehr erhalten. Knoten
 			B terminiert mit
@@ -280,14 +280,14 @@ class Ruecksetzpunktverwalter extends Node {
 		rpList.add(new int[]{10,10,10,10,10,10, 10, 10});
 		int[] rpDefault={-1,-1,-1,-1,-1,-1,-1,-1};
 		int errorcount=0;
-		
+
 		Msg message;
 		while(true)
 			if( (message = receive("AB",time() + 100)) == null) break;
 			else if( message.getSe() == 'B' && message.getTy() == 'f'){
 				int progress = number(message.getCo().split(" ")[0]);
 				int[] rp = rpDefault.clone();
-				//Remove last obviously faulty RP  
+				//Remove last obviously faulty RP
 				rpList.remove(rpList.size() - 1);
 				//Delete RPs until the correct progress is found.
 				while(rpList.size() > 1 && rpList.get(rpList.size() - 1)[0] != progress + 10) rpList.remove(rpList.size() - 1);
@@ -323,18 +323,18 @@ class Ruecksetzpunktverwalter extends Node {
 				say("Added RP: " + prettyPrint(rp));
 				rpList.add(rp);
 			}
-			
+
 		say("C OUT");
 		return errorcount+ " mal zurueckgesetzt";
 	}
-	
+
 	public static String prettyPrint(int[] in){
 		String out = "{ ";
 		for(int i : in){ out += i + " "; }
 		out += "}";
 		return out;
 	}
-	
+
 }
 
 public class G06_A2 extends SoFT {
