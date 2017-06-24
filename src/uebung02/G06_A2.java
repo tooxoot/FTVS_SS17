@@ -1,8 +1,8 @@
 package uebung02;
 import static SoFTlib.Helper.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 import SoFTlib.*;
 class Rechenprozess extends Node {
@@ -22,7 +22,7 @@ class Rechenprozess extends Node {
 	werden, der bei jedem fehlerfreien Rechenschritt um 1 erhoeht wird. Weiterhin simuliert schritt auch
 	eine kurze Bearbeitungsdauer. Der von schritt zurueckgelieferte Wert ist ein 8-elementiges boolesches
 	Array, das angibt, welche Elemente von a in dem durchgefuehrten Rechenschritt veraendert worden sind.
-	Nach Ausfuehrung eines Rechenschritts sendet Knoten A eine Ergebnis-Nachricht (Typ ’e’), die alle
+	Nach Ausfuehrung eines Rechenschritts sendet Knoten A eine Ergebnis-Nachricht (Typ ï¿½eï¿½), die alle
 	8 Elemente des Vektors a enthaelt (durch Leerzeichen getrennt) an den Absoluttest B, der diese auf
 	Korrektheit prueft.
 	*/
@@ -76,10 +76,10 @@ class Rechenprozess extends Node {
 		 * 
 		 * 
 		 *1.Ruecksetzpunkte erstellen und Nachricht senden:
-			Ruecksetzpunkte werden gemaeß dem Verfahren „unvollstaendige Zustandsaufzeichnung“ dadurch erstellt,
+			Ruecksetzpunkte werden gemaeï¿½ dem Verfahren ï¿½unvollstaendige Zustandsaufzeichnungï¿½ dadurch erstellt,
 			dass Knoten A nach jedem Rechenschritt die Elemente des Arrays a, die sich veraendert haben, in einer
-			Ruecksetzpunkt-Nachricht (Nachrichtentyp ’z’ ohne Fehlerinjektion) an den Ruecksetzpunktverwalter C
-			sendet – und zwar unmittelbar bevor er das Array a in einer Ergebnis-Nachricht an den Absoluttest
+			Ruecksetzpunkt-Nachricht (Nachrichtentyp ï¿½zï¿½ ohne Fehlerinjektion) an den Ruecksetzpunktverwalter C
+			sendet ï¿½ und zwar unmittelbar bevor er das Array a in einer Ergebnis-Nachricht an den Absoluttest
 			B sendet. In der Ruecksetzpunkt-Nachricht wird eine kommaseparierte Liste verwendet, wobei jedes
 			Element aus dem Index der veraenderten Zahl und der veraenderten Zahl selbst besteht, welche wiederum
 			durch Leerzeichen getrennt werden.
@@ -96,7 +96,7 @@ class Rechenprozess extends Node {
 			19, 13, 46, 23, 12, 16} des Arrays a zugesandt werden. Danach terminiert A mit
 			return s + " Rechenschritte durchgefuehrt.";
 			wobei s die Anzahl der tatsaechlich durchgefuehrten Rechenschritte ist. Bedingt durch das Zuruecksetzen
-			ist sie oftmals groeßer als 80.
+			ist sie oftmals groeï¿½er als 80.
 		 * 
 		 */
 		int[] a={10, 10, 10, 10, 10, 10, 10, 10}; //starting values for a
@@ -183,25 +183,25 @@ class Absoluttest extends Node {
 
 	public String runNode(String input) throws SoFTException {
 		/* 	Empfaengt Nachricht von A und preuft dies mit der Methode absoluttest:	
-		  	Nach Ausführung eines Rechenschritts sendet Knoten A eine Ergebnis-Nachricht (Typ ’e’), die alle
-			8 Elemente des Vektors a enthält (durch Leerzeichen getrennt) an den Absoluttest B, der diese auf
-			Korrektheit prüft. Dazu wird die Methode
+		  	Nach Ausfï¿½hrung eines Rechenschritts sendet Knoten A eine Ergebnis-Nachricht (Typ ï¿½eï¿½), die alle
+			8 Elemente des Vektors a enthï¿½lt (durch Leerzeichen getrennt) an den Absoluttest B, der diese auf
+			Korrektheit prï¿½ft. Dazu wird die Methode
 			boolean absoluttest(int[] a)
-			benutzt, die ebenfalls im Programmgerüst bereitgestellt wird. Bei bestandenem Absoluttest (Rückgabewert
-			true) sendet Knoten B alle 8 Elemente des Vektors a an den Knoten A zurück (Nachrichtentyp
-			’z’).
+			benutzt, die ebenfalls im Programmgerï¿½st bereitgestellt wird. Bei bestandenem Absoluttest (Rï¿½ckgabewert
+			true) sendet Knoten B alle 8 Elemente des Vektors a an den Knoten A zurï¿½ck (Nachrichtentyp
+			ï¿½zï¿½).
 		 
 		 *	In Knoten B soll weiterhin eine int-Variable f vereinbart werden, die den erreichten Fortschritt angibt.
 			Dazu wird unmittelbar vor jedem Absoluttest
 			f = fortschritt(f, a);
 			aufgerufen. Damit wird angezeigt, dass das fiktive Anwendungsprogramm mit den Daten des Arrays
-			a einen Fortschritt erreicht (der beim Zurücksetzen wieder teilweise reduziert wird). Die Methode
-			Fortschritt wird ebenfalls im Programmgerüst zur Verfügung gestellt.
+			a einen Fortschritt erreicht (der beim Zurï¿½cksetzen wieder teilweise reduziert wird). Die Methode
+			Fortschritt wird ebenfalls im Programmgerï¿½st zur Verfï¿½gung gestellt.
 			Wenn der Absoluttest einen Fehler erkennt, sendet er keine Nachricht an A, sondern eine Fehlermeldung
-			(Nachrichtentyp ’f’) an den Rücksetzpunktverwalter C mit dem Inhalt "<f> + Fehlermeldung", wobei
+			(Nachrichtentyp ï¿½fï¿½) an den Rï¿½cksetzpunktverwalter C mit dem Inhalt "<f> + Fehlermeldung", wobei
 			<f> der Wert der Fortschrittsvariablen ist.
 		 
-		 * 	Die Knoten B und C verwenden für ihre Empfangsoperationen eine
+		 * 	Die Knoten B und C verwenden fï¿½r ihre Empfangsoperationen eine
 			Zeitschranke, so dass sie ebenfalls terminieren, wenn sie von A keine Nachricht mehr erhalten. Knoten
 			B terminiert mit
 			return f + " wurde erreicht.";
@@ -227,6 +227,7 @@ class Absoluttest extends Node {
 			
 			
 			receivedmsg = receive('A', 'e', time()+100);
+			say("f = "+f);
 		}
 		return f + " wurde erreicht";
 	}
@@ -239,101 +240,101 @@ class Ruecksetzpunktverwalter extends Node {
 		 * TODO Ruecksetzpunktverwalter implementieren!
 		 * 
 		 * 
-		 * Es wird eine Fehlermeldung (Nachrichtentyp ’f’)  von dem  Rücksetzpunktverwalter C mit dem Inhalt "<f> + Fehlermeldung" empfangen, wobei
-			<f> der Wert der Fortschrittsvariablen ist. Als Antwort darauf sendet der Rücksetzpunktverwalter an
-			den Knoten A einen vollständigen Rücksetzpunkt, bestehend aus 8 Zahlen (Nachrichtentyp ’z’), die A in
-			das Array a übernimmt.
+		 * Es wird eine Fehlermeldung (Nachrichtentyp ï¿½fï¿½)  von dem  Rï¿½cksetzpunktverwalter C mit dem Inhalt "<f> + Fehlermeldung" empfangen, wobei
+			<f> der Wert der Fortschrittsvariablen ist. Als Antwort darauf sendet der Rï¿½cksetzpunktverwalter an
+			den Knoten A einen vollstï¿½ndigen Rï¿½cksetzpunkt, bestehend aus 8 Zahlen (Nachrichtentyp ï¿½zï¿½), die A in
+			das Array a ï¿½bernimmt.
 			
-			Rücksetzpunkte werden gemäß dem Verfahren „unvollständige Zustandsaufzeichnung“ dadurch erstellt,
-			dass Knoten A nach jedem Rechenschritt die Elemente des Arrays a, die sich verändert haben, in einer
-			Rücksetzpunkt-Nachricht (Nachrichtentyp ’z’ ohne Fehlerinjektion) an den Rücksetzpunktverwalter C
+			Rï¿½cksetzpunkte werden gemï¿½ï¿½ dem Verfahren ï¿½unvollstï¿½ndige Zustandsaufzeichnungï¿½ dadurch erstellt,
+			dass Knoten A nach jedem Rechenschritt die Elemente des Arrays a, die sich verï¿½ndert haben, in einer
+			Rï¿½cksetzpunkt-Nachricht (Nachrichtentyp ï¿½zï¿½ ohne Fehlerinjektion) an den Rï¿½cksetzpunktverwalter C
 			sendet
 			
-			Knoten C speichert die ihm zugesandten (meist unvollständigen) Rücksetzpunkte in einem zweidimensionalen
-			Array RP. Der erste Index von RP bezeichnet den (meist unvollständigen) Rücksetzpunkt,
-			wobei ältere Rücksetzpunkt einen kleineren Index aufweisen. Insgesamt werden bis zu 50 (meist unvollständige)
-			RP gespeichert. Der zweite Index von RP bezeichnet das Element von a. Bei unvollständigen
-			Rücksetzpunkten wird für alle nicht verfügbaren Elemente von a der Wert –1 eingetragen. Wenn der
-			Rücksetzpunkt-Speicher RP voll ist und ein weiterer Rücksetzpunkt gespeichert werden soll, muss der
-			mit Index 1 abgespeicherte Rücksetzpunkt RP[1][...] aus RP gelöscht werden. Alle nachfolgenden
-			Rücksetzpunkte RP[x][...] rücken dann um eine Position nach vorn. Der älteste Rücksetzpunkt RP
-			[0][...] enthält die Anfangsbelegung {10, 10, 10, 10, 10, 10, 10, 10} von a und wird niemals
-			gelöscht.
+			Knoten C speichert die ihm zugesandten (meist unvollstï¿½ndigen) Rï¿½cksetzpunkte in einem zweidimensionalen
+			Array RP. Der erste Index von RP bezeichnet den (meist unvollstï¿½ndigen) Rï¿½cksetzpunkt,
+			wobei ï¿½ltere Rï¿½cksetzpunkt einen kleineren Index aufweisen. Insgesamt werden bis zu 50 (meist unvollstï¿½ndige)
+			RP gespeichert. Der zweite Index von RP bezeichnet das Element von a. Bei unvollstï¿½ndigen
+			Rï¿½cksetzpunkten wird fï¿½r alle nicht verfï¿½gbaren Elemente von a der Wert ï¿½1 eingetragen. Wenn der
+			Rï¿½cksetzpunkt-Speicher RP voll ist und ein weiterer Rï¿½cksetzpunkt gespeichert werden soll, muss der
+			mit Index 1 abgespeicherte Rï¿½cksetzpunkt RP[1][...] aus RP gelï¿½scht werden. Alle nachfolgenden
+			Rï¿½cksetzpunkte RP[x][...] rï¿½cken dann um eine Position nach vorn. Der ï¿½lteste Rï¿½cksetzpunkt RP
+			[0][...] enthï¿½lt die Anfangsbelegung {10, 10, 10, 10, 10, 10, 10, 10} von a und wird niemals
+			gelï¿½scht.
 			
-			Wenn der Absoluttest durch eine Fehlermeldung (Nachrichtentyp ’f’) eine Rückwärtsbehebung verlangt,
-			dann soll aus den unvollständigen Rücksetzpunkten ein vollständiger zusammengesetzt werden. Außerdem
-			ist die Rücksetzweite in geeigneter Weise zu bestimmen. Dazu soll der mit der Fehlermeldung übermittelte
+			Wenn der Absoluttest durch eine Fehlermeldung (Nachrichtentyp ï¿½fï¿½) eine Rï¿½ckwï¿½rtsbehebung verlangt,
+			dann soll aus den unvollstï¿½ndigen Rï¿½cksetzpunkten ein vollstï¿½ndiger zusammengesetzt werden. Auï¿½erdem
+			ist die Rï¿½cksetzweite in geeigneter Weise zu bestimmen. Dazu soll der mit der Fehlermeldung ï¿½bermittelte
 			Fortschritt ausgewertet werden.
 			
 			
-			Die Knoten B und C verwenden für ihre Empfangsoperationen eine
+			Die Knoten B und C verwenden fï¿½r ihre Empfangsoperationen eine
 			Zeitschranke, so dass sie ebenfalls terminieren, wenn sie von A keine Nachricht mehr erhalten. Knoten
 			B terminiert mit
 			return f + " wurde erreicht.";
 			wobei f der letzte Wert der Fortschrittsvariablen f ist. Knoten C terminiert mit
 			return anzZurueck + " mal zurueckgesetzt.";
-			wobei anzZurueck die Anzahl der durchgeführten Rücksetzoperationen ist.
+			wobei anzZurueck die Anzahl der durchgefï¿½hrten Rï¿½cksetzoperationen ist.
 		 */
 		
-		int[][] RP =new int [50][8];
-		int RP_count=0;
-		int[] RPdefault={-1,-1,-1,-1,-1,-1,-1,-1};
-		
-		RP[0][0]=10;RP[0][1]=10;RP[0][2]=10;RP[0][3]=10;RP[0][4]=10;RP[0][5]=10;RP[0][6]=10;RP[0][7]=10;
+		ArrayList<int[]> rpList = new ArrayList<int[]>();
+		rpList.add(new int[]{10,10,10,10,10,10, 10, 10});
+		int[] rpDefault={-1,-1,-1,-1,-1,-1,-1,-1};
 		int errorcount=0;
 		
-		Msg receivedRP = receive('A', 'z', 100);
-		while(receivedRP!= null){
-			RP_count++;
-			if(RP_count>=50){
-				//setting RP_count on 49 so we can use the same method for inserting all of the messages
-				RP_count=49;
-				//if RP is full delete oldest item (RP[1]) and move all other items of the array one position up
-				for(int i=1;i<=48;i++){	RP[i]=RP[i+1];	}
-			}
-			//setting all of the current RP to -1
-			RP[RP_count]=RPdefault;
-			//changing the -1 to the values that were sent from A
-			for(int i=0; i< getItemCount(receivedRP.getCo());i++){	 
-				RP[RP_count][number(receivedRP.getCo(), i+1, 1)]= number(receivedRP.getCo(),i+1,2);
-			}
-			
-			Msg receive_temp = receive("AB", time()+100);
-			//no message received... abort!
-			if(receive_temp==null){break;}
-			
-			//received a message from B 
-			else if(receive_temp.getTy()=='f' && receive_temp.getSe()=='B'){
-				errorcount++;
-				int[] RP_send =RPdefault;
-				String RP_send_str="";
-				while(IntStream.of(RP_send).anyMatch(x -> x== -1)){
-					for(int i=0; i<=7;i++){	 
-						if(RP_send[i] < RP[RP_count][i]){
-							RP_send[i]= RP[RP_count][i];
-					}
-					RP_count--;
+		Msg message;
+		while(true)
+			if( (message = receive("AB",time() + 100)) == null) break;
+			else if( message.getSe() == 'B' && message.getTy() == 'f'){
+				int progress = number(message.getCo().split(" ")[0]);
+				int[] rp = rpDefault.clone();
+				//Remove last obviously faulty RP  
+				rpList.remove(rpList.size() - 1);
+				//Delete RPs until the correct progress is found.
+				while(rpList.size() > 1 && rpList.get(rpList.size() - 1)[0] != progress + 10) rpList.remove(rpList.size() - 1);
+				// Construct valid RP
+				//For each position of the RP...
+				for( int i = 0; i < 8; i++){
+					int currentIndex = rpList.size() - 1;
+					// ... search through the RPs until you find a value != -1
+					while(rp[i] == -1){
+						rp[i] = rpList.get(currentIndex)[i];
+						currentIndex--;
 					}
 				}
-				
-				
-				for(int i=0; i<=7;i++){RP_send_str+= RP_send[i]+" "; }
-				form('z', RP_send_str).send('A');
-				//send RP to A
-				
+				say(prettyPrint(rp));
+				// Send RP to A
+				String content = "";
+				for(int i : rp) content += i + " ";
+				content = content.trim();
+				form('z', content).send('A');
+				say("Restored RP: " + prettyPrint(rp));
+				errorcount++;
+			} else {
+				// Get RP from A's message and add it to the RP list
+				int[] rp = rpDefault.clone();
+				if(rpList.size() >= 50) rpList.remove(1);
+				String [] splitted = message.getCo().split(", ");
+				for( String s : splitted){
+					String [] sa = s.split(" ");
+					int position = number(sa[0]);
+					int value = number(sa[1]);
+					rp[position] = value;
+				}
+				say("Added RP: " + prettyPrint(rp));
+				rpList.add(rp);
 			}
 			
-			//received a RP from A
-			else if (receive_temp.getTy()=='z' && receive_temp.getSe()=='A') {
-				receivedRP=receive_temp;
-			}
-			
-			
-		}
-			
-		
+		say("C OUT");
 		return errorcount+ " mal zurueckgesetzt";
 	}
+	
+	public static String prettyPrint(int[] in){
+		String out = "{ ";
+		for(int i : in){ out += i + " "; }
+		out += "}";
+		return out;
+	}
+	
 }
 
 public class G06_A2 extends SoFT {
@@ -352,7 +353,7 @@ public class G06_A2 extends SoFT {
 		if (a < 10 || b < 10)
 			return 5; // Keine sinnvolle Programmausfuehrung.
 		if (b < 60 || b > 81)
-			return 2; // Zu geringer/großer Fortschritt.
+			return 2; // Zu geringer/groï¿½er Fortschritt.
 		if (a < b)
 			return 4; // Weniger Schritte als Fortschritt angibt.
 		if (a > b && c <= 0)
