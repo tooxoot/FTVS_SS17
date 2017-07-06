@@ -7,39 +7,39 @@
 - Mehrheitsentscheidung
   `a = b = 3`
 
-   Es kann abgebrochen werden, wenn eine Mehrheit gleicher Ergebnisse empfangen wurde (=> b).
-   Wenn keine Mehrheit empfangen wurde kann nicht entschieden werden (=> a).
+   Es kann entschieden werden, sobald eine absolute Mehrheit empfangen wurde (&#8658; b).
+   Wenn keine absolute Mehrheit vorliegt, kann keine Entscheidung gefällt werden (&#8658; a).
 
 
 - Paarentscheidung
   `a = b = 2`
 
-   Es kann abgebrochen werden, wenn ein Paar gleicher Ergebnisse empfangen wurde (=> b).
-   Wenn kein einziges Paar empfangen wurde kann nicht entschieden werden (=> a).
+   Es kann entschieden werden, sobald ein Paar gleicher Ergebnisse empfangen wurde (&#8658; b).
+   Wenn kein einziges Paar vorliegt,kann keine Entscheidung gefällt werden (&#8658; a).
 
 
 - Meiststimmenentscheidung
   `a = 1`
-  `b = 5`
+  `b = 3`
 
-   Es kann erst entschieden werden, wenn alle ergebnisse vorliegen (=> b).
-   Bei einer relativen Mehrheit ist die Groesse der Mengen egal (=> a).
+   Es kann entschieden werden, sobald eine absolute Mehrheit empfangen wurde (&#8658; b).
+   Bei einer relativen Mehrheit ist die Größe der Mengen egal (&#8658; a).
 
 
 - Einstimmigkeitsentscheidung
   `a = b = 5`
 
-   Es kann erst entschieden werden, wenn alle ergebnisse vorliegen (=> b).
-   Fuer Einstimmigkeit muessen alle Ergebnisse vorliegen (=> a).
+   Es kann erst entschieden werden, wenn alle Ergebnisse empfangen wurde (&#8658; b).
+   Für Einstimmigkeit müssen alle Ergebnisse vorliegen (&#8658; a).
 
 
 - Medianentscheidung
-  `a = 1`
-  `b = 5`
+  `Nicht Möglich`
 
-   Es kann erst entschieden werden, wenn alle ergebnisse vorliegen (=> b).
-   Fuer Medianentscheidung sollen alle Ergebnisse mit einbezogen werden! (=> a).
-
+  In eine Medianentscheidung müssen alle Ergebnisse einfließen. Daher müsste `b = 5` gesetzt werden.
+  Für alle Kombinationen mit `a` werden durch die Verwendung von `max(a,c)` Ergebnisse aussortiert, falls mehrere gleiche Ergebnisse empfangen wurden. Daraus folgt, dass in Einzelfällen keine echte  Medianentscheidung gefällt wird.
+  Ein Beispielmenge für einen solchen Fall wäre:
+  `{ {2017} , {218} , {2018, 2018} , {2019} }`
 
 ## Aufgabe 2:
 
