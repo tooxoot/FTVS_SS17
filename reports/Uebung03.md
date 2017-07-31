@@ -6,14 +6,14 @@
 
 - Mehrheitsentscheidung
   `a = b = 3`
-
+  <!-- korrekt -->
    Es kann entschieden werden, sobald eine absolute Mehrheit empfangen wurde (&#8658; b).
    Wenn keine absolute Mehrheit vorliegt, kann keine Entscheidung gefällt werden (&#8658; a).
 
 
 - Paarentscheidung
   `a = b = 2`
-
+  <!-- korrekt -->
    Es kann entschieden werden, sobald ein Paar gleicher Ergebnisse empfangen wurde (&#8658; b).
    Wenn kein einziges Paar vorliegt,kann keine Entscheidung gefällt werden (&#8658; a).
 
@@ -21,14 +21,14 @@
 - Meiststimmenentscheidung
   `a = 1`
   `b = 3`
-
+  <!--  -->
    Es kann entschieden werden, sobald eine absolute Mehrheit empfangen wurde (&#8658; b).
    Bei einer relativen Mehrheit ist die Größe der Mengen egal (&#8658; a).
 
 
 - Einstimmigkeitsentscheidung
   `a = b = 5`
-
+  <!-- korrekt -->
    Es kann erst entschieden werden, wenn alle Ergebnisse empfangen wurde (&#8658; b).
    Für Einstimmigkeit müssen alle Ergebnisse vorliegen (&#8658; a).
 
